@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="js/echarts.js"></script>
+    <title>echarts</title>
+</head>
+
+<body>
+<div id="myEchart" style="width: 500px; height: 600px;"></div>
+<script type="text/jscript ">
+			var em = document.getElementById('myEchart');
+			var myChart = echarts.init(em);
+		function randomData() {
+			now = new Date(+now + oneDay);
+			return {
+				name: now.toString(),
+				value: [
+					now,
+					null // Math.round(value)
+				]
+			}
+		}
+		var data = [];
+        var now = new Date();
+        var oneDay = 1000;
+        for (var i = 0; i < 29; i++) {
+            data.push(randomData());
+        }
+
+			var option = {
+				 color: ['#F4D03F', '#E0391C', '#5AF43F'],
+				 title: [{
+                left: '1%',
+                top: '6%',
+                textStyle: {
+                    color: '#57617B'
+                }
+            }, {
+                text: '城市TOP3排行',
+                left: '83%',
+                top: '6%',
+                textAlign: 'center',
+                textStyle: {
+                    color: '#57617B'
+                }
+            }],
+            
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                x: 300,
+                top: '7%',
+                textStyle: {
+                    color: '#57617B',
+                },
+                data: ['需求空缺bar', '需求空缺line', '附近可调度车辆bar','附近可调度车辆line']
+            },
+            
+//				tooltip: {
+//					trigger:'axis',
+//					axisPointer: {
+//						type: 'cross',
+//						label: {
+//							backgroundColor: '#283b56'
+//						}
+//					}
+//				},
+//				legend: {
+//					data: ['需求空缺', '预购队列', '附近可调度车辆']
+//				},
+				dataZoom: {
+					show: false,
+					start: 0,
+					end: 100
+				},
+				
+				grid: {
+                left: '1%',
+                right: '35%',
+                top: '16%',
+                bottom: '6%',
+                containLabel: true
+            },
+//				xAxis: [{
+//						type: 'category',
+//						name: '时间',
+//						boundaryGap: true,
+//						data: (function() {
+//							var now = new Date();
+//							var res = [];
+//							var len = 10;
+//							while(len--) {
+//								res.unshift(now.toLocaleTimeString().replace(/^\D*/, ''));
+//								now = new Date(now - 2000);
+//							}
+//							return res;
+//						})()
+//					}
+//
+//				],
+
+				xAxis: {
+                type: 'time',
+                splitLine: {
+                    show: false
+                },
+                "axisLine": {
+                    lineStyle: {
+                        color: '#57617B'
+                    }
+                },
+                "axisTick": {
+                    length:15,
+                    "show": false
+                },
+                boundaryGap: false,
+                data: data
+            },
+            yAxis: {
+                "axisLine": {
+                    lineStyle: {
+                        color: '#57617B'
+                    }
+                },
+                splitLine: {
+                    show: true,
+                    lineStyle: {
+                        color: '#57617B'
+                    }
+                },
+                "axisTick": {
+                    "show": false
+                },
+                axisLabel: {
+                    textStyle: {
+                        color: '#57617B'
+                    }
+                },
+                type: 'value',
+                name: '数量'
+                
+            },
+//				yAxis: [{
+//					type: 'value',
+//					name: '数量/万',
+//					max: 300,
+//					min: 0,
+//					boundaryGap: [0.2, 0.2]
+//				}],
+				series:[
+				{
+                name: '需求空缺bar',
+//              smooth: true,
+                type: 'bar',
+//              lineStyle: {
+//                  normal: {
+//                      width: 1
+//                  }
+//              },
+//              symbolSize: 6,
+//              symbol: 'circle',
+                data: data
+           },
+           {
+                name: '需求空缺line',
+                smooth: true,
+                type: 'line',
+                lineStyle: {
+                    normal: {
+                        width: 1
+                    }
+                },
+                symbolSize: 6,
+                symbol: 'circle',
+                data: data
+           },
+           {
+                name: '附近可调度车辆bar',
+//              smooth: true,
+                type: 'bar',
+//              lineStyle: {
+//                  normal: {
+//                      width: 1
+//                  }
+//              },
+//              symbolSize: 6,
+//              symbol: 'circle',
+                data: data
+           },
+           {
+                name: '附近可调度车辆line',
+                smooth: true,
+                type: 'line',
+                lineStyle: {
+                    normal: {
+                        width: 1
+                    }
+                },
+                symbolSize: 6,
+                symbol: 'circle',
+                data: data
+           }
+				]
+//				series: [{
+//						name: '需求空缺',
+//						type: 'bar',
+//						xAxisIndex: 0,
+//						yAxisIndex: 0,
+//						data: (function() {
+//							var res = [];
+//							var len = 10;
+//							while(len--) {
+//								res.push(Math.round(Math.random() * 100));
+//							}
+//							return res;
+//						})()
+//					},
+//					{
+//						name: '附近可调度车辆',
+//						type: 'bar',
+//						xAxisIndex: 0,
+//						yAxisIndex: 0,
+//						data: (function() {
+//							var res = [];
+//							var len = 10;
+//							while(len--) {
+//								res.push(Math.round(Math.random() * 100));
+//							}
+//							return res;
+//						})()
+//					},
+//					{
+//						name: '最新成交价',
+//						type: 'line',
+//						data: (function() {
+//							var res = [];
+//							var len = 10;
+//							while(len--) {
+//								res.push(Math.round(Math.random() * 100));
+//							}
+//							return res;
+//						})()
+//					}
+//				]
+			};
+
+			myChart.setOption(option);
+			
+			var count = 11;
+			setInterval(function() {
+				var x = new Date(); // 当前时间
+				
+				series = myChart.getOption().series;
+					var res = [];
+					var len = 10;
+					while(len--){
+						series[0].data.shift();
+						series[1].data.shift();
+						series[2].data.shift();
+						series[3].data.shift();
+						
+						var random1 = Math.round(Math.random() * 100);
+						series[0].data.push(random1);
+						series[1].data.push(random1);
+						var random2 = Math.round(Math.random() * 100);
+						series[2].data.push(random2);
+						series[3].data.push(random2);
+					}
+					xAxis = myChart.getOption().xAxis;
+				xAxis[0].data.shift();
+				xAxis[0].data.push(x);
+
+				myChart.setOption({
+                    series: series
+                });
+			}, 2000);
+			
+
+</script>
+</body>
+
+</html>

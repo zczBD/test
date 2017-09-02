@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="js/echarts.js"></script>
+    <script src="https://cdn.bootcss.com/angular.js/1.4.6/angular.min.js"></script>
+    <title>广告投放统计</title>
+</head>
+<body ng-app="app" ng-controller="complaintChartController">
+<div>
+    <div style="position:absolute;right:60px;top:9px;z-index: 100;">
+        <select ng-model="year2">
+            <option ng-repeat="x in years">{{x}}</option>
+        </select>
+
+        <select ng-model="month2">
+            <option ng-repeat="x in months">{{x}}</option>
+        </select>
+
+        <select ng-model="day2">
+            <option ng-repeat="x in days">{{x}}</option>
+        </select>
+    </div>
+    <div id="option2" style=" height: 600px;"></div>
+</div>
+
+<script type="text/javascript">
+    var app = angular.module('app', []);
+    app.controller('complaintChartController', function ($scope) {
+        var option2;
+
+        // 初始化下拉框
+        function initSelect() {
+            // 初始化下拉框的值为今天
+            $scope.year2 = $scope.year = new Date().getFullYear() + '年';
+            $scope.month2 = $scope.month = (new Date().getMonth() + 1) + '月';
+            $scope.day2 = $scope.day = new Date().getDate() + '日';
+
+            var years = [];
+
+            var y = new Date().getFullYear();
+            for (var i = y; i > y - 10; i--) {
+                years.push(i + "年");
+            }
+            $scope.years = years;
+
+            // 设置月下拉框的值
+            var months = [];
+
+            for (var j = 1; j <= 12; j++) {
+                months.push(j + "月");
+            }
+            $scope.months = months;
+
+            setDay($scope.month, $scope.year)
+        }
+
+        initSelect();
+
+        // 判断是否闰平年
+        function isPinYear(year) {
+            return (0 == year % 4 && (year % 100 != 0 || year % 400 == 0));
+        }
+
+        // 设置日的下拉框
+        function setDay(month, year) {
+            var days = [];
+
+            var monthDay = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+            var n = monthDay[parseInt(month.match('\\d*')) - 1];
+            if (isPinYear(parseInt(year.match('\\d*'))) && month == '2月') {
+                n++;
+            }
+            for (var i = 1; i <= n; i++) {
+                days.push(i + "日");
+            }
+            $scope.days = days;
+        }
+
+        // 分别给下拉框添加监听事件
+        function selectChange(selectType, index) {
+            $scope.$watch(selectType, function (newVal, oldVal) {
+                if (newVal != oldVal) {
+                    if (index == 0) {
+                        if (selectType == 'year') {
+                            setDay($scope.month, newVal);
+                        } else if (selectType == 'month') {
+                            setDay(newVal, $scope.year);
+                        }
+                        change(myChart1, option1);
+                    } else {
+                        if (selectType == 'year2') {
+                            setDay($scope.month2, newVal);
+                        } else if (selectType == 'month2') {
+                            setDay(newVal, $scope.year2);
+                        }
+                        change2(myChart2, option2);
+                    }
+                }
+            }, true);
+        }
+
+        selectChange('year2', 1);
+        selectChange('month2', 1);
+        selectChange('day2', 1);
+
+        // 当时间改变时报表数据改变
+        function change2(myChart, option) {
+            option2.series[0].data = [{
+                value: (Math.round(Math.random() * 200 + 500)),
+                name: "蜀山区"
+            }, {
+                value: (Math.round(Math.random() * 300 + 400)),
+                name: "瑶海区"
+            }, {
+                value: (Math.round(Math.random() * 200 + 600)),
+                name: "政务区"
+            }, {value: (Math.round(Math.random() * 230 + 300)), name: "包河区"}];
+            myChart2.setOption(option2);
+        }
+
+        // -------------车辆数与停车区数量比例报表---------------------
+        var dataSource2 = {
+            data: {
+                '数据': {}
+            }
+        };
+
+        // 初始化数据
+        var selectDate = $scope.year.match('\\d*') + '-' + $scope.month.match('\\d*') + '-' + $scope.day.match('\\d*');
+        dataSource2.data['数据'][selectDate] = [{value: 710, name: "A单车"}, {value: 560, name: "B单车"}, {
+            value: 230,
+            name: "C单车"
+        }, {value: 480, name: "D单车"}];
+        var ech = document.getElementById('option2');
+        myChart2 = echarts.init(ech);
+        option2 = {
+            backgroundColor: "#242d36",
+            // title: {
+            //     x:'45%',
+            //     text: '广告投放统计',
+            //     textStyle: {
+            //         color: "#fff"
+            //     }
+            // },
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} : {b} <br/>数量 : {c}<br/> 占比  : {d}%"
+            },
+            legend: {
+                orient: 'vertical',
+                right: 'right',
+                y: '50%',
+                data: ['A单车', 'B单车', 'C单车', 'D单车'],
+                textStyle: {
+                    color: "#fff"
+                }
+            },
+            color: ["#ECED14", "#23daff", "#f81f20", "#95FFD7"],
+            series: [{
+                name: '公司',
+                type: 'pie',
+                radius: ['25%', '65%'],
+                center: ['50%', '60%'],
+                data: dataSource2.data['数据'][selectDate],
+                label: {
+                    normal: {
+                        formatter: "数量 : {c}\n占比 : {d}%",
+                        position: "inner",
+                        show: true
+                    }
+                },
+                itemStyle: {
+                    emphasis: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }]
+        };
+        myChart2.setOption(option2);
+    });
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="js/echarts.js"></script>
+    <script type="text/javascript" src="js/angular.min.js"></script>
+    <script type="text/javascript" src="js/themes/dark.js"></script>
+    <script type="text/javascript" src="js/themes/macarons.js"></script>
+    <script type="text/javascript" src="js/themes/roma.js"></script>
+    <script type="text/javascript" src="js/themes/shine.js"></script>
+    <title>echarts</title>
+</head>
+
+<body>
+<div id="myEchart" style=" height: 600px;"></div>
+<script type="text/jscript ">
+		
+			function randomData() {
+            now = new Date(+ now + oneDay);
+            return {
+                name: now.toString(),
+                value: [
+                    now,
+                    null  // Math.round(value)
+                ]
+            }
+        }
+			var data = [];
+        	var now = new Date();
+        	var oneDay = 1000;
+        	for (var i = 0; i < 10; i++) {
+            data.push(randomData());
+        	}
+			var em = document.getElementById('myEchart');
+			var myChart = echarts.init(em, 'shine');
+					
+			option = {
+				tooltip: {
+					trigger: 'axis',
+					axisPointer: {
+						type: 'cross',
+						label: {
+							backgroundColor: '#283b56'
+						}
+					}
+				},
+				legend: {
+					data: ['需求空缺', '附近可调度车辆']
+				},
+				
+				dataZoom: {
+					show: false,
+					start: 0,
+					end: 100
+				},
+				xAxis: [{
+						type: 'category',
+						name: '时间',
+						boundaryGap: true,
+						data: (function() {
+							var now = new Date();
+							var res = [];
+							var len = 10;
+							while(len--) {
+								res.unshift(now.toLocaleTimeString().replace(/^\D*/, ''));
+								now = new Date(now - 2000);
+							}
+							return res;
+						})()
+					}
+				],
+				yAxis: [{
+					type: 'value',
+					scale: true,
+					name: '数量/万',
+					max: 300,
+					min: 0,
+				}],
+				series: [{
+						name: '需求空缺',
+						type: 'bar',
+						data: [154,128,156,200,147,208,260,214,206,228]
+					},
+					{
+						name: '附近可调度车辆',
+						type: 'bar',
+						data: [145,255,147,112,165,178,158,136,200,250]
+					}
+				]
+			};
+
+			myChart.setOption(option);
+			setInterval(function() {
+				axisData = (new Date()).toLocaleTimeString().replace(/^\D*/, '');
+				var data0 = option.series[0].data;
+				var data1 = option.series[1].data;
+				data0.shift();
+				data0.push(Math.round(Math.random() * 300));
+				data1.shift();
+				data1.push(Math.round(Math.random() * 300));
+				option.xAxis[0].data.shift();
+				option.xAxis[0].data.push(axisData);
+
+				myChart.setOption(option);
+			}, 2000);
+
+</script>
+</body>
+
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript"
+            src="http://api.map.baidu.com/api?v=2.0&ak=584cqWoEbTyVH9gjxjbojF5Xi9Wt2NMc"></script>
+    <script type="text/javascript"
+            src="http://api.map.baidu.com/library/TrafficControl/1.4/src/TrafficControl_min.js"></script>
+    <script type="text/javascript"
+            src="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js"></script>
+    <script type="text/javascript"
+            src="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.js"></script>
+    <script type="text/javascript"
+            src="http://api.map.baidu.com/library/DistanceTool/1.2/src/DistanceTool_min.js"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/library/LuShu/1.2/src/LuShu_min.js"></script>
+    <script type="text/javascript"
+            src="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/TextIconOverlay_min.js"></script>
+    <script type="text/javascript"
+            src="http://api.map.baidu.com/library/MarkerClusterer/1.2/src/MarkerClusterer_min.js"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
+    <script type="text/javascript" src="js/jquery-1.11.0.js"></script>
+    <title>echarts地图的热力图</title>
+</head>
+
+<body>
+<div id="myChart" style="height: 600px;"></div>
+<script type="text/javascript">app.title = '热力图与百度地图扩展';
+
+$.get('data/asset/data/hangzhou-tracks.json', function (data) {
+
+    var points = [].concat.apply([], data.map(function (track) {
+        return track.map(function (seg) {
+            return seg.coord.concat([1]);
+        });
+    }));
+    option = {
+        animation: false,
+        bmap: {
+            center: [120.13066322374, 30.240018034923],
+            zoom: 14,
+            roam: true
+        },
+        visualMap: {
+            show: false,
+            top: 'top',
+            min: 0,
+            max: 5,
+            seriesIndex: 0,
+            calculable: true,
+            inRange: {
+                color: ['blue', 'blue', 'green', 'yellow', 'red']
+            }
+        },
+        series: [{
+            type: 'heatmap',
+            coordinateSystem: 'bmap',
+            data: points,
+            pointSize: 5,
+            blurSize: 6
+        }]
+    }
+);
+
+my
+
+if (!app.inNode) {
+    // 添加百度地图插件
+    var bmap = myChart.getModel().getComponent('bmap').getBMap();
+    bmap.addControl(new BMap.MapTypeControl());
+}
+})
+;
+</script>
+</body>
+</html>

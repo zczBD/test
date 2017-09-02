@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="js/echarts.js"></script>
+    <script src="https://cdn.bootcss.com/angular.js/1.4.6/angular.min.js"></script>
+    <!--<link rel="stylesheet" href="css/css.css" />-->
+    <title>广告投诉报表统计</title>
+
+</head>
+
+<body ng-app="app" ng-controller="complaintChartController">
+
+
+<div>
+    <div style="position:absolute;right:60px;top:9px;z-index: 100;">
+        <select ng-model="year">
+            <option ng-repeat="x in years">{{x}}</option>
+        </select>
+
+        <select ng-model="month">
+            <option ng-repeat="x in months">{{x}}</option>
+        </select>
+
+        <select ng-model="day">
+            <option ng-repeat="x in days">{{x}}</option>
+        </select>
+    </div>
+    <div id="option1" style=" height: 600px;"></div>
+</div>
+<script type="text/javascript">
+
+
+    var app = angular.module('app', []);
+    app.controller('complaintChartController', function ($scope) {
+        var option1 = [];
+        var makerData;
+        var markLineData;
+
+        // 初始化下拉框
+        function initSelect() {
+            // 初始化下拉框的值为今天
+            $scope.year = new Date().getFullYear() + '年';
+            $scope.month = (new Date().getMonth() + 1) + '月';
+            $scope.day = new Date().getDate() + '日';
+
+            var years = [];
+
+            var y = new Date().getFullYear();
+            for (var i = y; i > y - 10; i--) {
+                years.push(i + "年");
+            }
+            $scope.years = years;
+
+            // 设置月下拉框的值
+            var months = [];
+
+            for (var j = 1; j <= 12; j++) {
+                months.push(j + "月");
+            }
+            $scope.months = months;
+
+            setDay($scope.month, $scope.year)
+        }
+
+        initSelect();
+
+        // 判断是否闰平年
+        function isPinYear(year) {
+            return (0 == year % 4 && (year % 100 != 0 || year % 400 == 0));
+        }
+
+        // 设置日的下拉框
+        function setDay(month, year) {
+            var days = [];
+
+            var monthDay = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+            var n = monthDay[parseInt(month.match('\\d*')) - 1];
+            if (isPinYear(parseInt(year.match('\\d*'))) && month == '2月') {
+                n++;
+            }
+            for (var i = 1; i <= n; i++) {
+                days.push(i + "日");
+            }
+            $scope.days = days;
+        }
+
+        // 分别给下拉框添加监听事件
+        function selectChange(selectType, index) {
+            $scope.$watch(selectType, function (newVal, oldVal) {
+                if (newVal != oldVal) {
+                    if (index == 0) {
+                        if (selectType == 'year') {
+                            setDay($scope.month, newVal);
+                        } else if (selectType == 'month') {
+                            setDay(newVal, $scope.year);
+                        }
+                        change(myChart1, option1);
+                    }
+                }
+            }, true);
+        }
+
+        selectChange('year', 0);
+        selectChange('month', 0);
+        selectChange('day', 0);
+
+        function change(myChart, option) {
+            var complaintData = [];
+            var handleData = [];
+            var unHandleData = [];
+
+            for (var i = 0; i < 5; i++) {
+                var num1 = Math.round(200 + Math.random() * 300);
+                var num2 = Math.round(100 + Math.random() * 100);
+                complaintData.push(num1);
+                handleData.push(num2);
+                unHandleData.push(num1 - num2);
+            }
+            option1.series[0].data = complaintData;
+            option1.series[1].data = handleData;
+            option1.series[2].data = unHandleData;
+            markLineDatas(unHandleData);
+
+            myChart1.setOption(option1);
+        }
+
+        var dataSource = {
+            datas: {
+                '投诉数': {},
+                '已处理': {},
+                '未处理': {}
+            }
+        };
+
+        // 初始化数据
+        var selectDate = $scope.year.match('\\d*') + '-' + $scope.month.match('\\d*') + '-' + $scope.day.match('\\d*');
+        dataSource.datas['投诉数'][selectDate] = [320, 332, 301, 334, 390];
+        dataSource.datas['已处理'][selectDate] = [120, 132, 101, 134, 90];
+        dataSource.datas['未处理'][selectDate] = [220, 182, 191, 234, 290];
+
+        function markLineDatas(makerData) {
+            markLineData = [];
+            for (var i = 1; i < makerData.length; i++) {
+                markLineData.push([{
+                    xAxis: i - 1,
+                    yAxis: makerData[i - 1],
+                    value: (makerData[i] / makerData[i - 1] * 100).toFixed(2)
+                }, {
+                    xAxis: i,
+                    yAxis: makerData[i]
+                }]);
+            }
+        }
+
+        markLineDatas(dataSource.datas['未处理'][selectDate]);
+
+        // 投诉报表
+        var ech = document.getElementById('option1');
+        var myChart1 = echarts.init(ech);
+        option1 = {
+            backgroundColor: '#2B2B2B',
+            title: {
+                text: '车辆数量统计',
+                subtext: '——————————',
+                itemGap: 0,
+                padding: [0, 0, 0, 30],
+                textStyle: {
+                    color: '#DCDCDC',
+                },
+                subtextStyle: {
+                    color: '#008C9E',
+                    verticalAlign: 'top',
+                    fontSize: 22
+                }
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: { // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            legend: {
+                data: ['投诉数', '已处理', '未处理'],
+                padding: [0, 0, 0, 30],
+                left: 'left',
+                textStyle: {
+                    color: '#DCDCDC',
+                },
+                itemWidth: 10,
+                itemHeight: 10,
+                borderRadius: 10,
+                top: '10%'
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                top: '20%',
+                borderColor: '#51585F',
+                containLabel: true
+            },
+            xAxis: [{
+                type: 'category',
+                data: ['A公司', 'B公司', 'C公司', 'D公司', 'E公司'],
+                axisLine: {
+                    lineStyle: {
+                        color: '#51585F',
+                    }
+                },
+                axisLabel: {
+                    textStyle: {
+                        color: "#fff"
+                    }
+                }
+            }],
+            yAxis: [{
+                type: 'value',
+                axisLine: {
+                    lineStyle: {
+                        color: '#51585F',
+                    }
+                },
+                axisLabel: {
+                    textStyle: {
+                        color: "#fff"
+                    }
+                },
+
+            }],
+            series: [{
+                name: '投诉数',
+                type: 'bar',
+                itemStyle: {
+                    normal: {
+                        color: 'red'
+                    }
+                },
+
+                barWidth: '8%',
+                data: dataSource.datas['投诉数'][selectDate]
+            },
+                {
+                    name: '已处理',
+                    type: 'bar',
+                    itemStyle: {
+                        normal: {
+                            color: '#1BBC9C'
+                        }
+                    },
+                    barWidth: '8%',
+                    data: dataSource.datas['已处理'][selectDate]
+                },
+                {
+                    name: '未处理',
+                    type: 'bar',
+                    itemStyle: {
+                        normal: {
+                            color: 'yellow'
+                        }
+                    },
+                    barWidth: '8%',
+                    data: dataSource.datas['未处理'][selectDate],
+                    markLine: {
+                        symbol: 'circle',
+                        symbolSize: 0,
+                        label: {
+                            normal: {
+                                show: false
+                            }
+                        },
+                        lineStyle: {
+                            normal: {
+                                color: '#999',
+                                type: 'solid',
+                                width: 2
+                            }
+                        },
+                        data: markLineData
+                    }
+                }
+            ]
+        };
+
+        myChart1.setOption(option1);
+        myChart1.resize();
+
+    });
+
+</script>
+</body>
+
+</html>

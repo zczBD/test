@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="../js/angular.min.js"></script>
+    <script type="text/javascript" src="../js/echarts.js"></script>
+    <title>物价及收费监管报表</title>
+</head>
+
+<body ng-app="app" ng-controller="chartController">
+<div style="height: 600px; background-color:#242d36 ;">
+    <div ng-model="charge.operation"
+         style="border: 1px dashed; height: 40px; color: palevioletred; width: 130px; text-align: center; font-family: '微软雅黑'; margin-top: 10px; margin-left: 50%;">
+        运营收费总额<br/>{{charge.operation}}元
+    </div>
+    <div ng-model="charge.standard"
+         style="border: 1px dashed; height: 40px; color: palevioletred; width: 130px; text-align: center; font-family: '微软雅黑'; margin-top: 10px; margin-left: 50%; ">
+        标准收费总额<br/>{{charge.standard}}元
+    </div>
+    <div style="margin-right: 10%; margin-top: 5%;"><select ng-model="carType" ng-init="carType = carTypes[0]">
+        <option ng-repeat="carType in carTypes">{{carType}}</option>
+    </select></div>
+    <div id="myChart" style="height: 500px;"></div>
+</div>
+<script type="text/javascript">
+    var app = angular.module('app', []);
+    app.controller('chartController', function ($scope) {
+
+        $scope.charge = {};
+        $scope.charge.operation = Math.round(Math.random() * 3000 + 20000);
+        $scope.charge.standard = Math.round(Math.random() * 4000 + 25000);
+
+        $scope.carTypes = ['顺风车', '顺风车(拼车)', '快车', '快车(拼车)'];
+
+        Date.prototype.Format = function (fmt) {
+            var obj = {
+                "H+": this.getHours(), //小时
+                "m+": this.getMinutes(), //分
+                "s+": this.getSeconds(), //秒
+            };
+            for (var k in obj) {
+                if (new RegExp("(" + k + ")").test(fmt)) {
+                    fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (obj[k]) : (("00" + obj[k]).substr(("" + obj[k]).length)));
+                }
+            }
+            return fmt;
+        }
+
+        function randomData(type) {
+            var data = [];
+            if (type == 1) {
+                for (var i = 0; i < 7; i++) {
+                    data.push(Math.round(7000 + Math.random() * 5000));
+                }
+                return data;
+            }
+
+            if (type == 2) {
+                for (var i = 0; i < 7; i++) {
+                    data.push(Math.round(1000 + Math.random() * 1000));
+                }
+                return data;
+            }
+
+            if (type == 3) {
+                for (var i = 0; i < 7; i++) {
+                    data.push(Math.round(6000 + Math.random() * 4000));
+                }
+                return data;
+            }
+
+        }
+
+        var ech = document.getElementById('myChart');
+        var myChart = echarts.init(ech);
+        var option = {
+            color: ['#019aba', '#7a201f', '#11565d'],
+            backgroundColor: '#242d36',
+            title: {
+                text: '收费实际和标准对比',
+                textStyle: {
+                    color: '#fff',
+                    fontSize: 18,
+                    fontWeight: 'bold',
+
+                },
+                subtext: '————————————————',
+                subtextStyle: {
+                    color: '#ddd',
+                },
+            },
+            legend: {
+                right: '20%',
+                textStyle: {
+                    color: '#666',
+                    fontSize: 12,
+                },
+                data: ['标准收费', '可波动幅度', '运营收费'],
+
+            },
+            tooltip: {
+                show: true,
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    crossStyle: {
+                        color: '#ddd',
+
+                    },
+
+                },
+            },
+
+            grid: {
+                left: 5,
+                right: 20,
+                top: 80,
+                bottom: 50,
+                containLabel: true,
+            },
+            xAxis: [{
+                show: true,
+                axisLine: {
+                    lineStyle: {
+                        color: '#fff'
+                    }
+                },
+                axisLabel: {
+                    interval: 0,
+//						rotate: -20,
+                    margin: 30,
+                    textStyle: {
+                        color: '#ddd',
+                        align: 'center'
+
+                    },
+                },
+                axisTick: {
+                    show: false,
+                    alignWithLabel: false,
+                    lineStyle: {
+                        color: '#ddd',
+
+                    },
+                },
+                data: (function () {
+                    var now = new Date();
+                    var res = [];
+                    var len = 7;
+                    while (len--) {
+                        res.unshift(now.Format("HH:mm:ss"));
+                        now = new Date(now - 2000);
+                    }
+                    return res;
+                })()
+            }],
+            yAxis: [{
+                type: 'value',
+                name: '金额',
+                nameTextStyle: {
+                    color: '#ddd',
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: '#fff'
+                    }
+                },
+                axisLabel: {
+                    textStyle: {
+                        color: '#fff',
+                    },
+                },
+                axisTick: {
+                    alignWithLabel: true,
+                    lineStyle: {
+                        color: '#ddd',
+
+                    },
+                },
+                splitLine: {
+                    show: false,
+                },
+            }],
+            series: [{
+                type: 'bar',
+                name: '标准收费',
+                stack: '收费',
+                itemStyle: {
+                    normal: {
+                        color: '#18D8C6'
+                    }
+                },
+                barWidth: '18%',
+                data: [11000, 9658, 8125, 12010, 10356, 7524, 7812],
+//						data: data1,
+                label: {
+                    normal: {
+                        textStyle: {
+                            color: '#000',
+                        },
+                    },
+                },
+            },
+                {
+                    type: 'bar',
+                    name: '可波动幅度',
+                    stack: '收费',
+                    itemStyle: {
+                        normal: {
+                            color: '#EDB23F'
+                        }
+                    },
+                    barWidth: '18%',
+                    data: [1000, 1200, 563, 789, 1305, 1105, 952],
+//						data: data2,
+                    label: {
+                        normal: {
+                            textStyle: {
+                                color: '#000',
+                            },
+                        },
+                    },
+                },
+                {
+                    type: 'bar',
+                    name: '运营收费',
+                    itemStyle: {
+                        normal: {
+                            color: '#228BC6'
+                        }
+                    },
+                    barWidth: '18%',
+                    data: [10000, 8458, 7562, 11221, 9051, 6419, 6860],
+//						data: data3,
+                    label: {
+                        normal: {
+                            textStyle: {
+                                color: '#000',
+                            },
+                        },
+                    },
+                }
+            ]
+        };
+
+        myChart.setOption(option);
+
+        $scope.$watch('carType', function (newVal, oldVal) {
+            if (newVal !== oldVal || newVal.currentPage !== oldVal.currentPage || newVal.pageSize !== oldVal.pageSize) {
+                option.series[0].data = randomData(1);
+                option.series[1].data = randomData(2);
+                option.series[2].data = randomData(3);
+                myChart.setOption(option);
+            }
+        }, true);
+        setInterval(function () {
+            var data0 = option.series[0].data;
+            var data1 = option.series[1].data;
+            var data2 = option.series[2].data;
+            data0.shift();
+            var num0 = Math.round(7000 + Math.random() * 5000);
+            var num1 = Math.round(1000 + Math.random() * 1000);
+            data0.push(num0);
+            data1.shift();
+            data1.push(num1);
+            data2.shift();
+            data2.push(num0 - num1);
+            $scope.$apply(function () {
+                $scope.charge.operation += (num0 - num1);
+                $scope.charge.standard += num0;
+            });
+            option.xAxis[0].data.shift();
+            option.xAxis[0].data.push((new Date()).Format("HH:mm:ss"));
+            myChart.setOption(option);
+        }, 2000);
+    });
+</script>
+</body>
+
+</html>

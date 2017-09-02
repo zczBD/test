@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>广告投放统计饼状图</title>
+    <script type="text/javascript" src="js/echarts.js"></script>
+</head>
+
+<body>
+<div id="adChart" style="width: 600px;height:400px;"></div>
+<script type="text/javascript">
+    var ech = document.getElementById('adChart');
+    var adChart = echarts.init(ech);
+    var option = {
+        title: {
+            text: '广告投放统计'
+        },
+        tooltip: {
+            trigger: 'item',
+            formatter: "{a} : {b} <br/>数量 : {c}<br/> 占比  : {d}%"
+        },
+        legend: {
+            orient: 'vertical',
+            right: 'right',
+            data: ['膜拜单车', 'OFO', '酷骑单车', '小蓝单车']
+        },
+        series: [{
+            name: '公司',
+            type: 'pie',
+            radius: '55%',
+            center: ['50%', '60%'],
+            data: [{
+                value: 0,
+                name: '膜拜单车'
+            },
+                {
+                    value: 0,
+                    name: 'OFO'
+                },
+                {
+                    value: 0,
+                    name: '酷骑单车'
+                },
+                {
+                    value: 0,
+                    name: '小蓝单车'
+                }
+            ],
+
+            itemStyle: {
+                emphasis: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            }
+        }]
+    };
+
+    adChart.setOption(option);
+</script>
+</body>
+
+</html>

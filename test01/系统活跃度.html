@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="../js/echarts.js"></script>
+    <script type="text/javascript" src="../js/angular.min.js"></script>
+    <title>echarts</title>
+</head>
+
+<body>
+<div id="myEchart" style="height: 600px;"></div>
+<script type="text/jscript ">
+			//		Date.prototype.Format = function(fmt) {
+			//				var obj = {
+			//					"H+": this.getHours(), //小时 
+			//					"m+": this.getMinutes(), //分 
+			//					"s+": this.getSeconds(), //秒 
+			//				};
+			//				for(var k in obj) {
+			//					if(new RegExp("(" + k + ")").test(fmt)) {
+			//						fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (obj[k]) : (("00" + obj[k]).substr(("" + obj[k]).length)));
+			//					}
+			//				}
+			//				return fmt;
+			//			}
+
+			var data1 = [];
+			var data2 = [];
+
+			function randomData() {
+				var value = Math.round(3500 + Math.random() * 2000);
+				return {
+					name: now.toString(),
+					value: [
+						now,
+						value
+					]
+				}
+			}
+
+			var now = +new Date() - 8* 1000;
+			var oneDay = 2000;
+
+			for(var i = 0; i < 4; i++) {
+				now = new Date(+now + oneDay);
+				data1.push(randomData());
+				data2.push(randomData());
+			}
+
+			var em = document.getElementById('myEchart');
+			var myChart = echarts.init(em);
+			option = {
+				backgroundColor: '#666',
+				title: {
+					x: 'center',
+					y: 0,
+					text: '系统活跃度',
+					textStyle: {
+						fontSize: 20,
+						color: '#ffffff'
+					}
+				},
+				tooltip: {
+					trigger: 'axis',
+					axisPointer: {
+						type: 'cross',
+						label: {
+							backgroundColor: '#283b56'
+						}
+					}
+				},
+				legend: {
+					y: '30',
+					textStyle: {
+						color: '#fff',
+					},
+					data: ['用户活跃度', '车辆活跃度']
+				},
+
+				dataZoom: {
+					show: false,
+					start: 0,
+					end: 100
+				},
+				xAxis: [{
+						type: 'time',
+						name: '时间',
+						splitNumber: 4,
+						nameLocation: 'end',
+						axisLine: {
+							show: false,
+							lineStyle: {
+								color: 'rgba(255, 255, 255,1)' //横列样式
+							}
+						},
+						splitLine:false,
+						axisTick: {
+							show: false,
+						},
+						axisLabel: {
+							verticalAlign: 'middle'
+						},
+						
+						boundaryGap: ['0.2', '0.2']
+//						data: (function() {
+//							var now = new Date();
+//							var res = [];
+//							var len = 7;
+//							while(len--) {
+//								res.unshift(now.Format("HH:mm:ss"));
+//								now = new Date(now - 2000);
+//							}
+//							return res;
+//						})()
+					}
+
+				],
+				yAxis: [{
+					type: 'value',
+					scale: true,
+					name: '数量/万',
+					axisLine: {
+						show: false,
+						lineStyle: {
+							color: 'rgba(255, 255, 255,1)' //横列样式
+						}
+					},
+					axisTick: {
+						show: false,
+					},
+					splitLine: { //基准样式
+						lineStyle: {
+							color: 'rgba(255, 255, 255, .1)' //基准样式
+						}
+					},
+					boundaryGap: [0.2, 0.2]
+				}],
+				series: [{
+						name: '用户活跃度',
+						type: 'bar',
+						barWidth: '20',
+						itemStyle: {
+							normal: {
+								color: 'rgb(27,188,156)',
+								borderColor: 'rgba(247,206,142,0)',
+								borderWidth: 2,
+								opacity: '1',
+							}
+						},
+						data: data1
+					},
+					{
+						name: '车辆活跃度',
+						type: 'bar',
+						barWidth: '20',
+						barGap: '30%',
+						barCategoryGap: '100',
+						itemStyle: {
+							normal: {
+								color: 'rgb(52,152,220)',
+								borderColor: 'rgba(102,218,93,0)',
+								borderWidth: 0,
+								opacity: '1',
+								backgroundColor: 'rgba(21, 177, 211, 1)'
+							}
+						},
+						data: data2
+					}
+				]
+			};
+
+			myChart.setOption(option);
+
+			//			setInterval(function() {
+			//				axisData = (new Date()).Format("HH:mm:ss");
+			//				var data0 = option.series[0].data;
+			//				var data1 = option.series[1].data;
+			//				data0.shift();
+			//				data0.push(Math.round(2000 + Math.random() * 2000));
+			//				data1.shift();
+			//				data1.push(Math.round(2000 + Math.random() * 2000));
+			//				option.xAxis[0].data.shift();
+			//				option.xAxis[0].data.push(axisData);
+			//
+			//				myChart.setOption(option);
+			//			}, 2000);
+
+			setInterval(function() {
+
+				// for (var i = 0; i < 5; i++) {
+				data1.shift();
+				data2.shift();
+				now = new Date();
+				data1.push(randomData());
+				data2.push(randomData());
+				// }
+				myChart.setOption({
+					series: [{
+						data: data1
+					}, {
+						data: data2
+					}]
+				});
+
+			}, 2000);
+
+</script>
+</body>
+
+</html>

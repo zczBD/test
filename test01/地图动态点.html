@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="js/echarts.js"></script>
+    <script type="text/javascript" src="js/jquery-1.11.0.js"></script>
+    <script type="text/javascript" src="js/china.js"></script>
+
+    <title></title>
+</head>
+<body>
+<div id="echart" style="height: 400px;"></div>
+<script type="text/javascript">
+    var ech = document.getElementById("echart");
+    var echart = echarts.init(ech);
+    //设置一些可选的参数
+    var data1 = [
+        {name: '天鹅湖万达广场', value: 9},
+        {name: '上铁银欣花园', value: 12},
+        {name: '前城大厦', value: 12}
+
+    ];
+
+    var data3 = [
+
+        {name: '合肥市政府', value: 20},
+        {name: '合肥大剧院', value: 24},
+        {name: '合肥市西园新村小学', value: 24},
+        {name: '天鹅湖体育公园', value: 25},
+        {name: '合家福超市', value: 25}
+
+    ];
+    var geoCoordMap = {
+        "合肥市政府": [117.2322870000, 31.8266680000],
+        "合肥大剧院": [117.2309210000, 31.8219130000],
+        "合肥市西园新村小学": [117.2260340000, 31.8300120000],
+        "天鹅湖体育公园": [117.2230880000, 31.8194580000],
+        "合家福超市": [117.2240220000, 31.8209310000],
+        "天鹅湖万达广场": [117.2307060000, 31.8250420000],
+        "上铁银欣花园": [117.2077450000, 31.8271590000],
+        "前城大厦": [117.2189200000, 31.8303190000]
+    };
+
+    var convertData = function (data) {
+        var res = [];
+        for (var i = 0; i < data.length; i++) {
+            var geoCoord = geoCoordMap[data[i].name];
+            if (geoCoord) {
+                res.push({
+                    name: data[i].name,
+                    value: geoCoord.concat(data[i].value)
+                });
+            }
+        }
+        return res;
+    };
+
+    var pointSize = 20;
+
+    option = {
+        backgroundColor: '#fff',
+        title: {
+            text: '国内节点分布',
+            subtext: '点击访问',
+            sublink: 'http://www.pm25.in',
+            left: 'center',
+            textStyle: {
+                color: '#e0e6ef'
+            }
+        },
+        tooltip: {
+            trigger: 'item'
+        },
+        legend: {
+            orient: 'vertical',
+            y: 'bottom',
+            x: 'right',
+            data: ['服务中', '服务器异常'],
+            textStyle: {
+                color: '#fff'
+            }
+        },
+        bmap: {
+            center: [117.282827, 31.859858],
+            label: {
+                emphasis: {
+                    show: false
+                }
+            },
+            zoom: 14,
+            roam: true,
+            itemStyle: {
+                normal: {
+                    areaColor: '#e0e6ef',//区域颜色
+                    borderColor: '#ffffff'//区域划分边框颜色
+                },
+                emphasis: {
+                    areaColor: '#e0e6ef'//鼠标Havor颜色
+                }
+            }
+
+        },
+        series: [
+            {
+                name: '服务中',
+                type: 'effectScatter',
+                coordinateSystem: 'bmap',
+                data: convertData(data1),
+                symbolSize: pointSize,
+                showEffectOn: 'render',
+                rippleEffect: {
+                    brushType: 'stroke'
+                },
+                hoverAnimation: true,
+                label: {
+                    normal: {
+                        formatter: '{b}',
+                        position: 'top',
+                        show: true
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        color: '#4acdae',
+                        shadowBlur: 10,
+                        shadowColor: 'black'
+                    }
+                },
+                zlevel: 1
+            },
+            {
+                name: '服务器异常',
+                type: 'effectScatter',
+                coordinateSystem: 'bmap',
+                data: convertData(data3),
+                symbolSize: pointSize,
+                showEffectOn: 'render',
+                rippleEffect: {
+                    brushType: 'stroke'
+                },
+                hoverAnimation: true,
+                label: {
+                    normal: {
+                        formatter: '{b}',
+                        position: 'top',
+                        show: true
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        color: '#ff3300',
+                        shadowBlur: 10,
+                        shadowColor: 'black'
+                    }
+                },
+                zlevel: 1
+            }
+        ]
+    };
+
+
+    echart.setOption(option);
+</script>
+</body>
+</html>

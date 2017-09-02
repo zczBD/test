@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="js/echarts.js"></script>
+    <script type="text/javascript" src="js/angular.min.js"></script>
+    <script type="text/javascript" src="js/themes/dark.js"></script>
+    <title>echarts</title>
+</head>
+
+<body>
+<div id="myEchart" style=" width:500px; height: 500px;"></div>
+<script type="text/jscript ">
+			function randomData() {
+            now = new Date(+ now + oneDay);
+            return {
+                name: now.toString(),
+                value: [
+                    now,
+                    null
+                ]
+            }
+        }
+
+        var data = [];
+        var now = new Date();
+        var oneDay = 1000;
+        for (var i = 0; i < 10; i++) {
+            data.push(randomData());
+        }
+
+        var em = document.getElementById('myEchart');
+        myEchart = echarts.init(em, 'dark');
+
+        var option = {
+
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                left: 'left',
+                data: ['需求空缺', '可调度车辆']
+            },
+            xAxis: {
+                type: 'time',
+                name: '时间',
+                boundaryGap: ['20%','20%'],
+                splitLine: {
+                    show: false
+                }
+            },
+            yAxis: {
+                type: 'value',
+                scale: true,
+				name: '数量/万',
+				max: 300,
+				min: 0,
+                splitLine: {
+                    show: false
+                }
+            },
+            series: [{
+                name: '需求空缺',
+                type: 'bar',
+                data: data
+            },{
+                name: '可调度车辆',
+                type: 'bar',
+                data: data
+            }]
+        };
+
+        myEchart.setOption(option);
+
+        setInterval(function () {
+           
+                var x = new Date(), // current time
+                    y = [[Math.round(Math.random()*300),'需求空缺'],[Math.round(Math.random()*300),'可调度车辆']],
+                    series = myEchart.getOption().series;
+                for (var i=0; i<y.length; i++){
+                    series[i].data.shift();
+                    series[i].data.push({name:x.toString() ,value:[x, y[i][0]] });
+                }
+                myEchart.setOption({
+                    series: series
+                });
+           
+        }, 2000);
+
+</script>
+</body>
+
+</html>
+

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="js/echarts.js"></script>
+    <script type="text/javascript" src="js/angular.min.js"></script>
+    <script type="text/javascript" src="js/themes/dark.js"></script>
+    <script type="text/javascript" src="js/themes/macarons.js"></script>
+    <script type="text/javascript" src="js/themes/roma.js"></script>
+    <script type="text/javascript" src="js/themes/shine.js"></script>
+    <title>echarts</title>
+</head>
+
+<body>
+<div id="myEchart" style=" width: 600px; height: 600px;"></div>
+<script type="text/jscript ">
+			var em = document.getElementById('myEchart');
+			var myChart = echarts.init(em);
+
+			option = {
+	            backgroundColor: '#333',
+	            title: {
+	                    x:'center',
+	                    y: 0,
+	                    text: '城市TOP3种类排行',
+	                    textStyle:{
+	                        fontSize:20,
+	                        color: '#ffffff'
+	                    }
+	                },
+					tooltip: {
+						trigger: 'axis',
+						axisPointer: {
+							type: 'cross',
+							label: {
+								backgroundColor: '#283b56'
+							}
+						}
+					},
+					legend: {
+					    y:'30',
+					    textStyle:{
+					      color:'#fff',
+					    },
+						data: ['需求空缺', '附近可调度车辆']
+					},
+
+					dataZoom: {
+						show: false,
+						start: 0,
+						end: 100
+					},
+					xAxis: [{
+							type: 'category',
+							name: '时间',
+							axisLine: {
+	                            lineStyle: {
+	                                color: 'rgba(255, 255, 255,1)' //横列样式
+	                                    }
+	                        },
+							boundaryGap: true,
+							data: (function() {
+								var now = new Date();
+								var res = [];
+								var len = 5;
+								while(len--) {
+									res.unshift(now.toLocaleTimeString().replace(/^\D*/, ''));
+									now = new Date(now - 2000);
+								}
+								return res;
+							})()
+						}
+
+					],
+					yAxis: [{
+						type: 'value',
+						scale: true,
+						name: '数量/万',
+						max: 300,
+						min: 0,
+						axisLine: {
+	                    lineStyle: {
+	                        color: 'rgba(255, 255, 255,1)' //横列样式
+	                                }
+	                    },
+	                        splitLine: {//基准样式
+	                        lineStyle: {
+	                            color: 'rgba(255, 255, 255, .1)' //基准样式
+	                        }
+	                    },
+						boundaryGap: [0.2, 0.2]
+					}],
+					series: [{
+							name: '需求空缺',
+							type: 'bar',
+							itemStyle: {
+	                           normal: {
+	                               color: 'rgb(191,80,76)',
+	                               borderColor: 'rgba(247,206,142,0)',
+	                               borderWidth: 2,
+	                               opacity:'1',
+	                           }
+	                        },
+							data: [154,128,156,200,147]
+						},
+						{
+							name: '附近可调度车辆',
+							type: 'bar',
+							itemStyle: {
+	                           normal: {
+	                               color: 'rgb(0,175,80)',
+	                               borderColor: 'rgba(102,218,93,0)',
+	                               borderWidth: 0,
+	                               opacity:'1',
+	                               backgroundColor:'rgba(21, 177, 211, 1)'
+	                           }
+	                       },
+							xAxisIndex: 0,
+							yAxisIndex: 0,
+							data: [145,255,147,112,165]
+						}
+					]
+				};
+
+				myChart.setOption(option);
+
+				setInterval(function() {
+					axisData = (new Date()).toLocaleTimeString().replace(/^\D*/, '');
+					var data0 = option.series[0].data;
+					var data1 = option.series[1].data;
+					data0.shift();
+					data0.push(Math.round(150+Math.random() * 100));
+					data1.shift();
+					data1.push(Math.round(150+Math.random() * 100));
+					option.xAxis[0].data.shift();
+					option.xAxis[0].data.push(axisData);
+
+					myChart.setOption(option);
+				}, 2000);
+
+</script>
+</body>
+
+</html>

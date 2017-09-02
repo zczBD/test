@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;" charset="utf-8"/>
+    <title>label制作</title>
+    <!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.2"></script>-->
+    <script type="text/javascript"
+            src="http://api.map.baidu.com/api?v=2.0&ak=584cqWoEbTyVH9gjxjbojF5Xi9Wt2NMc"></script>
+</head>
+
+<body>
+<div style="width:800px;height:500px;border:1px solid gray" id="container"></div>
+</body>
+
+</html>
+<script type="text/javascript">
+    var map = new BMap.Map("container"); //创建地图容器
+    var point = new BMap.Point(116.404, 39.915); //创建一个点
+    map.centerAndZoom(point, 15); //设立中心点和地图级别，就是初始化地图
+    var myLabel = new BMap.Label("这是百度地图标签", //为lable填写内容
+        {
+            offset: new BMap.Size(-60, -60), //label的偏移量，为了让label的中心显示在点上
+            position: point
+        }); //label的位置
+    myLabel.setStyle({ //给label设置样式，任意的CSS都是可以的
+        fontSize: "14px", //字号
+        border: "0", //边
+        width: "125px", //宽
+        textAlign: "center", //文字水平居中显示
+//		lineHeight: "120px", //行高，文字垂直居中显示
+//		background: "url(http://cdn1.iconfinder.com/data/icons/CrystalClear/128x128/actions/gohome.png)", //背景图片，这是房产标注的关键！
+        cursor: "pointer"
+    });
+    myLabel.setTitle("我是文本标注label"); //为label添加鼠标提示
+    map.addOverlay(myLabel); //把label添加到地图上
+
+    var infoWindow = new BMap.InfoWindow("<p style='font-size:12px;lineheight:1.8em;'>我是lable打开的信息窗口  <img src='http://dev.baidu.com/wiki/static/static/img/new.gif' /></p>"); // 创建信息窗口对象
+    myLabel.addEventListener("click", function () {
+        map.openInfoWindow(infoWindow, point);
+    });
+</script>
