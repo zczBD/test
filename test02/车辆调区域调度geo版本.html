@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="../js/echarts.js" type="text/javascript"></script>
+    <script src="../js/bmap.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../js/angular.min.js"></script>
+    <script src="../js/hefei.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../js/lodash.js"></script>
+    <script type="text/javascript" src="../js/ng-echarts.js"></script>
+    <script type="text/javascript" src="../js/getscript.js"></script>
+    <script type="text/javascript" src="../js/echarts-gl.js"></script>
+    <title>车辆区域调度geo</title>
+</head>
+<body>
+<div id="mapOption" style="height: 800px;" ng-app="app" ng-controller="ctrl"></div>
+<script type="text/javascript">
+    var app = angular.module('app', []);
+    app.controller('ctrl', function () {
+        var ech = document.getElementById('mapOption');
+        var myChart = echarts.init(ech);
+        var option;
+        var allData = {
+            "citys": [
+                {
+                    "name": "肥西",
+                    "value": [116.909555, 31.644699, 20],
+                    "symbolSize": 20,
+                    "itemStyle": {
+                        "normal": {
+                            "color": "#00FFFF"
+                        }
+                    }
+                },
+                {
+                    "name": "肥东",
+                    "value": [117.616316, 31.932419, 20],
+                    "symbolSize": 20,
+                    "itemStyle": {
+                        "normal": {
+                            "color": "#dc4e49"
+                        }
+                    }
+                },
+                {
+                    "name": "长丰",
+                    "value": [117.231842, 32.171498, 20],
+                    "symbolSize": 20,
+                    "itemStyle": {
+                        "normal": {
+                            "color": "#00FFFF"
+                        }
+                    }
+                },
+                {
+                    "name": "庐江",
+                    "value": [117.282015, 31.299139, 20],
+                    "symbolSize": 20,
+                    "itemStyle": {
+                        "normal": {
+                            "color": "#00FFFF"
+                        }
+                    }
+                },
+                {
+                    "name": "蜀山",
+                    "value": [117.240845, 31.85991, 20],
+                    "symbolSize": 20,
+                    "itemStyle": {
+                        "normal": {
+                            "color": "#00FFFF"
+//                        "color": "#FF0000"
+                        }
+                    }
+                },
+                {
+                    "name": "高新",
+                    "value": [117.016692, 31.874473, 20],
+                    "symbolSize": 20,
+                    "itemStyle": {
+                        "normal": {
+                            "color": "#dc4e49"
+                        }
+                    }
+                },
+                {
+                    "name": "滨湖",
+                    "value": [117.330883, 31.759104, 20],
+                    "symbolSize": 20,
+                    "itemStyle": {
+                        "normal": {
+                            "color": "#dc4e49"
+//                        "color": "#FF0000"
+                        }
+                    }
+                },
+
+                {
+                    "name": "巢湖",
+                    "value": [117.777293, 31.666284, 20],
+                    "symbolSize": 20,
+                    "itemStyle": {
+                        "normal": {
+                            "color": "#00FFFF"
+                        }
+                    }
+                },
+                {
+                    "name": "包河",
+                    "value": [117.492147, 31.803059, 20],
+                    "symbolSize": 20,
+                    "itemStyle": {
+                        "normal": {
+                            "color": "#00FFFF"
+//                        "color": "#FF0000"
+                        }
+                    }
+                },
+                {
+                    "name": "庐阳",
+                    "value": [117.254551, 31.902874, 20],
+                    "symbolSize": 20,
+                    "itemStyle": {
+                        "normal": {
+                            "color": "#00FFFF"
+                        }
+                    }
+                },
+                {
+                    "name": "瑶海",
+                    "value": [117.336332, 31.911824, 20],
+                    "symbolSize": 20,
+                    "itemStyle": {
+                        "normal": {
+                            "color": "#00FFFF"
+                        }
+                    }
+                },
+                {//
+                    "name": "岗集镇",
+                    "value": [117.133399, 31.99925, 20],
+                    "symbolSize": 20,
+                    "itemStyle": {
+                        "normal": {
+                            "color": "#00FFFF"
+                        }
+                    }
+                },
+                {
+                    "name": "安徽职业技术学院",
+                    "value": [117.564586, 31.599558, 20],
+                    "symbolSize": 20,
+                    "itemStyle": {
+                        "normal": {
+                            "color": "#00FFFF"
+                        }
+                    }
+                },
+                {
+                    "name": "盛桥镇",
+                    "value": [117.501345, 31.406455, 20],
+                    "symbolSize": 20,
+                    "itemStyle": {
+                        "normal": {
+                            "color": "#00FFFF"
+                        }
+                    }
+                },
+                {
+                    "name": "肥西县",
+                    "value": [117.06211, 31.637933, 20],
+                    "symbolSize": 20,
+                    "itemStyle": {
+                        "normal": {
+                            "color": "#00FFFF"
+                        }
+                    }
+                }],
+            "moveLines": [
+                {
+                    "coords": [
+                        [116.909555, 31.644699],
+                        [117.016692, 31.874473]
+                    ]
+                }, {
+                    "coords": [
+                        [117.492147, 31.803059],
+                        [117.016692, 31.874473]
+                    ]
+                }, {
+                    "coords": [
+                        [117.231842, 32.171498],
+                        [117.016692, 31.874473]
+                    ]
+                }, {
+                    "coords": [
+                        [117.282015, 31.299139],
+                        [117.016692, 31.874473]
+                    ]
+                }, {
+                    "coords": [
+                        [117.240845, 31.85991],
+                        [117.016692, 31.874473]
+                    ]
+                }, {
+                    "coords": [
+                        [117.777293, 31.666284],
+                        [117.016692, 31.874473]
+                    ]
+                }, {
+                    "coords": [
+                        [117.336332, 31.911824],
+                        [117.016692, 31.874473]
+                    ]
+                }, {
+                    "coords": [
+                        [117.254551, 31.902874],
+                        [117.016692, 31.874473]
+                    ]
+                }, {//
+                    "coords": [
+                        [117.133399, 31.99925],
+                        [117.016692, 31.874473]
+                    ]
+                }, {
+                    "coords": [
+                        [117.564586, 31.599558],
+                        [117.016692, 31.874473]
+                    ]
+                }, {
+                    "coords": [
+                        [117.501345, 31.406455],
+                        [117.016692, 31.874473]
+                    ]
+                }, {
+                    "coords": [
+                        [117.06211, 31.637933],
+                        [117.016692, 31.874473]
+                    ]
+                }
+                , {
+                    "coords": [
+                        [116.909555, 31.644699],
+                        [117.616316, 31.932419]
+                    ]
+                }, {
+                    "coords": [
+                        [117.492147, 31.803059],
+                        [117.616316, 31.932419]
+                    ]
+                }, {
+                    "coords": [
+                        [117.231842, 32.171498],
+                        [117.616316, 31.932419]
+                    ]
+                }, {
+                    "coords": [
+                        [117.282015, 31.299139],
+                        [117.616316, 31.932419]
+                    ]
+                }, {
+                    "coords": [
+                        [117.240845, 31.85991],
+                        [117.616316, 31.932419]
+                    ]
+                }, {
+                    "coords": [
+                        [117.777293, 31.666284],
+                        [117.616316, 31.932419]
+                    ]
+                }, {
+                    "coords": [
+                        [117.336332, 31.911824],
+                        [117.616316, 31.932419]
+                    ]
+                }, {
+                    "coords": [
+                        [117.254551, 31.902874],
+                        [117.616316, 31.932419]
+                    ]
+                }, {//
+                    "coords": [
+                        [117.133399, 31.99925],
+                        [117.616316, 31.932419]
+                    ]
+                }, {
+                    "coords": [
+                        [117.564586, 31.599558],
+                        [117.616316, 31.932419]
+                    ]
+                }, {
+                    "coords": [
+                        [117.501345, 31.406455],
+                        [117.616316, 31.932419]
+                    ]
+                }, {
+                    "coords": [
+                        [117.06211, 31.637933],
+                        [117.616316, 31.932419]
+                    ]
+                }
+                ,
+                {
+                    "coords": [
+                        [116.909555, 31.644699],
+                        [117.330883, 31.759104]
+                    ]
+                }, {
+                    "coords": [
+                        [117.492147, 31.803059],
+                        [117.330883, 31.759104]
+                    ]
+                }, {
+                    "coords": [
+                        [117.231842, 32.171498],
+                        [117.330883, 31.759104]
+                    ]
+                }, {
+                    "coords": [
+                        [117.282015, 31.299139],
+                        [117.330883, 31.759104]
+                    ]
+                }, {
+                    "coords": [
+                        [117.240845, 31.85991],
+                        [117.330883, 31.759104]
+                    ]
+                }, {
+                    "coords": [
+                        [117.777293, 31.666284],
+                        [117.330883, 31.759104]
+                    ]
+                }, {
+                    "coords": [
+                        [117.336332, 31.911824],
+                        [117.330883, 31.759104]
+                    ]
+                }, {
+                    "coords": [
+                        [117.254551, 31.902874],
+                        [117.330883, 31.759104]
+                    ]
+                }, {
+                    "coords": [
+                        [117.254551, 31.902874],
+                        [117.330883, 31.759104]
+                    ]
+                }, {//
+                    "coords": [
+                        [117.133399, 31.99925],
+                        [117.330883, 31.759104]
+                    ]
+                }, {
+                    "coords": [
+                        [117.564586, 31.599558],
+                        [117.330883, 31.759104]
+                    ]
+                }, {
+                    "coords": [
+                        [117.501345, 31.406455],
+                        [117.330883, 31.759104]
+                    ]
+                }, {
+                    "coords": [
+                        [117.06211, 31.637933],
+                        [117.330883, 31.759104]
+                    ]
+                }]
+        };
+
+        option = {
+            backgroundColor: '#00040C',
+            title: {
+                text: '车辆调度',
+                left: 'center',
+                textStyle: {
+                    color: '#00FFFF'
+                }
+            },
+            legend: {
+                show: false,
+                orient: 'vertical',
+                top: 'bottom',
+                left: 'right',
+                data: ['地点', '线路'],
+                textStyle: {
+                    color: '#00FFFF'
+                }
+            },
+            geo: {
+                map: 'hefei',
+                center: [117.294088, 31.856318],
+                label: {
+                    emphasis: {
+                        show: false
+                    }
+                },
+                zoom: 4.5,
+                roam: true,
+                itemStyle: {
+                    normal: {
+                        areaColor: 'rgba(0,0,0,0)',
+                        borderColor: 'rgba(100,149,237,1)'
+                    },
+                    emphasis: {
+                        areaColor: '#2a333d'
+                    }
+                }
+            },
+            series: [{
+                name: '地点',
+                type: 'effectScatter',
+                coordinateSystem: 'geo',
+                zlevel: 2,
+                rippleEffect: {
+                    scale: 3,
+                    brushType: 'stroke'
+                },
+                label: {
+                    emphasis: {
+                        show: true,
+                        position: 'right',
+                        formatter: '{b}'
+                    }
+                },
+                symbolSize: 1,
+                showEffectOn: 'render',
+                itemStyle: {
+                    normal: {
+                        color: '#46bee9'
+                    }
+                },
+                data: allData.citys
+            }, {
+                type: 'lines',
+                zlevel: 1,
+                effect: {
+                    show: true,
+                    period: 3,
+                    trailLength: 0.3,
+                    color: '#fff',
+                    symbolSize: 3
+                },
+                lineStyle: {
+                    normal: {
+                        width: 0,
+                        curveness: 0.1
+                    }
+                },
+                data: allData.moveLines
+            },
+                {
+                    type: 'lines',
+                    zlevel: 2,
+                    symbol: ['none', 'arrow'],
+                    symbolSize: 5,
+                    effect: {
+                        show: true,
+                        period: 3,
+                        trailLength: 0.3,
+                        symbol: 'triangle',
+                        symbolSize: 6
+                    },
+                    lineStyle: {
+                        normal: {
+//                        color: color[i],
+                            color: '#00FFFF',
+                            width: 2,
+                            opacity: 0.6,
+                            curveness: 0.1
+                        }
+                    },
+                    data: allData.moveLines
+                }]
+        };
+        myChart.setOption(option);
+        myChart.resize();
+    });
+
+</script>
+
+</body>
+</html>

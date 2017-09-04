@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>区域车辆调度</title>
+    <script src="../js/echarts.js" type="text/javascript"></script>
+    <script src="../js/bmap.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../js/angular.min.js"></script>
+    <script src="../js/hefei.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../js/lodash.js"></script>
+    <script type="text/javascript" src="../js/ng-echarts.js"></script>
+    <script type="text/javascript" src="../js/getscript.js"></script>
+    <script type="text/javascript" src="../js/echarts-gl.js"></script>
+</head>
+<body>
+
+<div id="mapOption" style="height: 800px;" ng-app="app" ng-controller="ctrl"></div>
+<script type="text/javascript">
+    var app = angular.module('app', []);
+    app.controller('ctrl', function ($interval) {
+        var ech = document.getElementById('mapOption');
+        var myChart = echarts.init(ech);
+        var option;
+        var allData = {
+            "citys": [
+                {
+                    "name": "中国科学技术大学车辆停放点", // 中国科学技术大学东区黄金广场31.8372583692,117.2521287762
+                    "value": [117.2738518410, 31.8465412082, 20],
+                    "symbolSize": 50,
+                    "itemStyle": {
+                        "normal": {
+                            "color": "#dc4e49" // 红色
+                        }
+                    }
+                },
+                {
+                    "name": "合肥市第十七中学车辆停放点",
+                    "value": [117.2511475442, 31.8377418537, 20],
+                    "symbolSize": 50,
+                    "itemStyle": {
+                        "normal": {
+                            "color": "#dc4e49" // 红色
+                        }
+                    }
+                },
+                {
+                    "name": "兴都大厦",
+                    "value": [117.2792806320, 31.8485098902, 20],
+                    "symbolSize": 20,
+                    "itemStyle": {
+                        "normal": {
+                            "color": "#00ffff" // 浅蓝色
+                        }
+                    }
+                },
+                {
+                    "name": "合肥学院",
+                    "value": [117.2697481142, 31.8457855544, 20],
+                    "symbolSize": 20,
+                    "itemStyle": {
+                        "normal": {
+                            "color": "#00ffff" // 浅蓝色
+                        }
+                    }
+                },
+                {
+                    "name": "金水花园",
+                    "value": [117.2819458309, 31.8435135715, 20],
+                    "symbolSize": 20,
+                    "itemStyle": {
+                        "normal": {
+                            "color": "#00ffff" // 浅蓝色
+                        }
+                    }
+                },
+                {
+                    "name": "太湖路小学",
+                    "value": [117.2742160098, 31.8376254688, 20],
+                    "symbolSize": 5,
+                    "itemStyle": {
+                        "normal": {
+                            "color": "#00ffff" // 浅蓝色
+                        }
+                    }
+                },
+                {
+                    "name": "科苑新村",
+                    "value": [117.2790439860, 31.8393391192, 20],
+                    "symbolSize": 5,
+                    "itemStyle": {
+                        "normal": {
+                            "color": "#00ffff" // 浅蓝色
+                        }
+                    }
+                },
+                {
+                    "name": "安徽医科大学第一附属医院",
+                    "value": [117.2743592110, 31.8538114165, 20],
+                    "symbolSize": 20,
+                    "itemStyle": {
+                        "normal": {
+                            "color": "#00ffff" // 浅蓝色
+                        }
+                    }
+                },
+                {
+                    "name": "合肥市第二中学",
+                    "value": [117.2846924129, 31.8491280229, 20],
+                    "symbolSize": 20,
+                    "itemStyle": {
+                        "normal": {
+                            "color": "#00ffff" // 浅蓝色
+                        }
+                    }
+                },
+                {
+                    "name": "香樟雅苑",
+                    "value": [117.2554528136, 31.8417235288, 20],
+                    "symbolSize": 20,
+                    "itemStyle": {
+                        "normal": {
+                            "color": "#00ffff" // 浅蓝色
+                        }
+                    }
+                },
+                {
+                    "name": "金通大厦",
+                    "value": [117.2577933300, 31.8298254991, 20],
+                    "symbolSize": 20,
+                    "itemStyle": {
+                        "normal": {
+                            "color": "#00ffff" // 浅蓝色
+                        }
+                    }
+                },
+                {
+                    "name": "港汇广场",
+                    "value": [117.2396078061, 31.8388419116, 20],
+                    "symbolSize": 20,
+                    "itemStyle": {
+                        "normal": {
+                            "color": "#00ffff" // 浅蓝色
+                        }
+                    }
+                },
+                {
+                    "name": "安建大厦",
+                    "value": [117.2430020202, 31.8470274887, 20],
+                    "symbolSize": 5,
+                    "itemStyle": {
+                        "normal": {
+                            "color": "#00ffff" // 浅蓝色
+                        }
+                    }
+                },
+                {
+                    "name": "华府骏苑小学",
+                    "value": [117.2425317208, 31.8341160073, 20],
+                    "symbolSize": 20,
+                    "itemStyle": {
+                        "normal": {
+                            "color": "#00ffff" // 浅蓝色
+                        }
+                    }
+                },
+                {
+                    "name": "雅集美术馆",
+                    "value": [117.2496917208, 31.8331860073, 20],
+                    "symbolSize": 5,
+                    "itemStyle": {
+                        "normal": {
+                            "color": "#00ffff" // 浅蓝色
+                        }
+                    }
+                }],
+            "line1": [
+                {
+                    "coords": [
+                        [117.2792806320, 31.8485098902],  // 起点 兴都大厦
+                        [117.2778107815, 31.8480222808] // 终点 丝绸大厦
+                    ]
+                }, {
+                    "coords": [
+                        [117.2697481142, 31.8457855544], // 起点 合肥学院
+                        [117.2726180248, 31.8465958944]
+                    ]
+                }, {
+                    "coords": [
+                        [117.2819458309, 31.8435135715], // 起点 金水花园
+                        [117.2794952087, 31.8445451406]
+                    ]
+                }, {
+                    "coords": [
+                        [117.2742160098, 31.8376254688], // 起点 太湖路小学
+                        [117.2738995091, 31.8405012842]
+                    ]
+                }, {
+                    "coords": [
+                        [117.2790439860, 31.8393391192], // 起点 科苑新村
+                        [117.2774460011, 31.8413641034]
+                    ]
+                }, {
+                    "coords": [
+                        [117.2743592110, 31.8538114165], // 起点 安徽医科大学第一附属医院
+                        [117.2747239914, 31.8511820918]
+                    ]
+                }, {
+                    "coords": [
+                        [117.2846924129, 31.8491280229], // 起点 合肥市第二中学
+                        [117.2825681034, 31.8479796402]  // 安徽省歌舞苑
+                    ]
+                }],
+            "line2": [
+                {
+                    "coords": [
+                        [117.2554528136, 31.8417235288], // 起点 香樟雅苑
+                        [117.2542720553, 31.8399172946]
+                    ]
+                }, {
+                    "coords": [
+                        [117.2577933300, 31.8298254991], // 起点 金通大厦
+                        [117.2560101268, 31.8314946092]
+                    ]
+                }, {
+                    "coords": [
+                        [117.2430020202, 31.8470274887], // 起点 安建大厦
+                        [117.2446408045, 31.8451218431]
+                    ]
+                }, {
+                    "coords": [
+                        [117.2396078061, 31.8388419116], // 起点 港汇广场
+                        [117.2429453490, 31.8385576659]
+                    ]
+                }, {
+                    "coords": [
+                        [117.2496917208, 31.8331860073], // 起点 雅集美术馆
+                        [117.2503697036, 31.8347109800]
+                    ]
+                }, {
+                    "coords": [
+                        [117.2425317208, 31.8341160073], // 起点 华府骏苑小学
+                        [117.2453271506, 31.8350938327]
+                    ]
+                }
+            ]
+        };
+
+
+        option = {
+            backgroundColor: '#00040C',
+            title: {
+                text: '车辆调度',
+                left: 'center',
+                textStyle: {
+                    color: '#00FFFF'
+                }
+            },
+            legend: {
+                show: false,
+                orient: 'vertical',
+                top: 'bottom',
+                left: 'right',
+                data: ['地点', '线路'],
+                textStyle: {
+                    color: '#00FFFF'
+                }
+            },
+            bmap: {
+                //center: [117.2760735379, 31.8432697953],
+                center: [117.2668849958, 31.8411241144],
+                zoom: 16,
+                roam: true,
+                mapStyle: {
+                    styleJson: [
+                        {
+                            "featureType": "land",
+                            "elementType": "geometry",
+                            "stylers": {
+                                "color": "#212121"
+                            }
+                        },
+                        {
+                            "featureType": "building",
+                            "elementType": "geometry",
+                            "stylers": {
+                                "color": "#2b2b2b"
+                            }
+                        },
+                        {
+                            "featureType": "highway",
+                            "elementType": "all",
+                            "stylers": {
+                                "lightness": -42,
+                                "saturation": -91
+                            }
+                        },
+                        {
+                            "featureType": "arterial",
+                            "elementType": "geometry",
+                            "stylers": {
+                                "lightness": -77,
+                                "saturation": -94
+                            }
+                        },
+                        {
+                            "featureType": "green",
+                            "elementType": "geometry",
+                            "stylers": {
+                                "color": "#1b1b1b"
+                            }
+                        },
+                        {
+                            "featureType": "water",
+                            "elementType": "geometry",
+                            "stylers": {
+                                "color": "#181818"
+                            }
+                        },
+                        {
+                            "featureType": "subway",
+                            "elementType": "geometry.stroke",
+                            "stylers": {
+                                "color": "#181818"
+                            }
+                        },
+                        {
+                            "featureType": "railway",
+                            "elementType": "geometry",
+                            "stylers": {
+                                "lightness": -52
+                            }
+                        },
+                        {
+                            "featureType": "all",
+                            "elementType": "labels.text.stroke",
+                            "stylers": {
+                                "color": "#313131"
+                            }
+                        },
+                        {
+                            "featureType": "all",
+                            "elementType": "labels.text.fill",
+                            "stylers": {
+                                "color": "#8b8787"
+                            }
+                        },
+                        {
+                            "featureType": "manmade",
+                            "elementType": "geometry",
+                            "stylers": {
+                                "color": "#1b1b1b"
+                            }
+                        },
+                        {
+                            "featureType": "local",
+                            "elementType": "geometry",
+                            "stylers": {
+                                "lightness": -75,
+                                "saturation": -91
+                            }
+                        },
+                        {
+                            "featureType": "subway",
+                            "elementType": "geometry",
+                            "stylers": {
+                                "lightness": -65
+                            }
+                        },
+                        {
+                            "featureType": "railway",
+                            "elementType": "all",
+                            "stylers": {
+                                "lightness": -40
+                            }
+                        },
+                        {
+                            "featureType": "boundary",
+                            "elementType": "geometry",
+                            "stylers": {
+                                "color": "#8b8787",
+                                "weight": "1",
+                                "lightness": -29
+                            }
+                        }
+                    ]
+                }
+            },
+            series: [{
+                name: '地点',
+                type: 'effectScatter',
+                coordinateSystem: 'bmap',
+                zlevel: 2,
+                rippleEffect: {
+                    scale: 3,
+                    brushType: 'stroke'
+                },
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'right',
+                        formatter: '{b}'
+                    }
+                },
+                symbolSize: 1,
+                showEffectOn: 'render',
+                itemStyle: {
+                    normal: {
+                        color: '#46bee9'
+                    }
+                },
+                data: allData.citys
+            }, {
+                type: 'lines',
+                coordinateSystem: 'bmap',
+                zlevel: 1,
+                effect: {
+                    show: true,
+                    period: 3,
+                    trailLength: 0.7,
+                    constantSpeed: 80,
+                    color: '#ED1B10',
+                    symbolSize: 10,
+//                        symbol: 'image://../img/mobike.png'triangle
+                    symbol: 'arrow'
+                },
+                lineStyle: {
+                    normal: {
+                        color: "transparent",
+                        width: 0,
+                        curveness: 0.1
+                    }
+                },
+                data: allData.line1
+            }, {
+                type: 'lines',
+                coordinateSystem: 'bmap',
+                zlevel: 1,
+                effect: {
+                    show: true,
+                    period: 3,
+                    trailLength: 0.7,
+                    constantSpeed: 80,
+                    color: '#ED1B10',
+                    symbolSize: 10,
+//                        symbol: 'image://../img/mobike.png'triangle
+                    symbol: 'arrow'
+                },
+                lineStyle: {
+                    normal: {
+                        color: "transparent",
+                        width: 0,
+                        curveness: 0.1
+                    }
+                },
+                data: allData.line2
+
+            }
+
+            ]
+        };
+        myChart.setOption(option);
+
+        // 添加信息窗口
+        var backMarker1 = new BMap.Marker(new BMap.Point(117.2760735379, 31.8432697953)); // 远处点
+        var backMarker2 = new BMap.Marker(new BMap.Point(117.2511475442, 31.8377418537));
+
+        function addOverlay() {
+            backMarker1.hide();
+            backMarker2.hide();
+            var baiduMap = myChart.getModel().getComponent('bmap').getBMap();
+            var point = new BMap.Point(117.2760735379, 31.8432697953);
+            var point2 = new BMap.Point(117.2511475442, 31.8377418537);
+
+            // 添加背景框
+            var myIcon = new BMap.Icon('../img/ifwindow2.png', new BMap.Size(340, 130));
+            var opts1 = {
+                offset: new BMap.Size(-25, -200), // 设置偏移量
+                icon: myIcon
+            };
+            var opts2 = {
+                offset: new BMap.Size(35, -85), // 设置偏移量
+                icon: myIcon
+            };
+            backMarker1 = new BMap.Marker(point, opts1);
+            backMarker2 = new BMap.Marker(point2, opts2);
+            baiduMap.addOverlay(backMarker1);
+            baiduMap.addOverlay(backMarker2);
+
+            // 添加信息
+            var styles = {
+                color: "white",
+                fontSize: "16px",
+                height: "25px",
+                lineHeight: "25px",
+                fontFamily: "微软雅黑",
+                backgroundColor: '#9E3329',
+                borderColor: '#9E3329'
+            };
+
+            var label1 = new BMap.Label('停放点名称:中国科学技术大学\n', {offset: new BMap.Size(0, 6)}); // 创建文本标注对象
+            label1.setStyle(styles);
+            backMarker1.setLabel(label1);
+            var number = Math.round(Math.random() * 50 + 16);
+            var label2 = new BMap.Label('需求车辆:' + number, {offset: new BMap.Size(0, 30)});
+            label2.setStyle(styles);
+            backMarker1.setLabel(label2);
+            var label3 = new BMap.Label('停放点名称:合肥第十七中学停放点\n', {offset: new BMap.Size(0, 6)}); // 创建文本标注对象
+            label3.setStyle(styles);
+            backMarker2.setLabel(label3);
+            var number = Math.round(Math.random() * 50 + 16);
+            var label4 = new BMap.Label('需求车辆:' + number, {offset: new BMap.Size(0, 30)});
+            label4.setStyle(styles);
+            backMarker2.setLabel(label4);
+        }
+
+        addOverlay();
+
+        $interval(function () {
+            addOverlay();
+        }, 1000, 2)
+    });
+</script>
+</body>
+</html>

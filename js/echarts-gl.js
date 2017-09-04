@@ -766,7 +766,6 @@
         }, e.exports = N
     }, function (e, t, r) {
         "use strict";
-
         function n(e, t, r) {
             return e < t ? t : e > r ? r : e
         }
@@ -1110,7 +1109,6 @@
         }), s.BYTE = i.BYTE, s.UNSIGNED_BYTE = i.UNSIGNED_BYTE, s.SHORT = i.SHORT, s.UNSIGNED_SHORT = i.UNSIGNED_SHORT, s.INT = i.INT, s.UNSIGNED_INT = i.UNSIGNED_INT, s.FLOAT = i.FLOAT, s.HALF_FLOAT = 36193, s.UNSIGNED_INT_24_8_WEBGL = 34042, s.DEPTH_COMPONENT = i.DEPTH_COMPONENT, s.DEPTH_STENCIL = i.DEPTH_STENCIL, s.ALPHA = i.ALPHA, s.RGB = i.RGB, s.RGBA = i.RGBA, s.LUMINANCE = i.LUMINANCE, s.LUMINANCE_ALPHA = i.LUMINANCE_ALPHA, s.SRGB = 35904, s.SRGB_ALPHA = 35906, s.COMPRESSED_RGB_S3TC_DXT1_EXT = 33776, s.COMPRESSED_RGBA_S3TC_DXT1_EXT = 33777, s.COMPRESSED_RGBA_S3TC_DXT3_EXT = 33778, s.COMPRESSED_RGBA_S3TC_DXT5_EXT = 33779, s.NEAREST = i.NEAREST, s.LINEAR = i.LINEAR, s.NEAREST_MIPMAP_NEAREST = i.NEAREST_MIPMAP_NEAREST, s.LINEAR_MIPMAP_NEAREST = i.LINEAR_MIPMAP_NEAREST, s.NEAREST_MIPMAP_LINEAR = i.NEAREST_MIPMAP_LINEAR, s.LINEAR_MIPMAP_LINEAR = i.LINEAR_MIPMAP_LINEAR, s.REPEAT = i.REPEAT, s.CLAMP_TO_EDGE = i.CLAMP_TO_EDGE, s.MIRRORED_REPEAT = i.MIRRORED_REPEAT, e.exports = s
     }, function (e, t, r) {
         "use strict";
-
         function n() {
             return {locations: {}, attriblocations: {}}
         }
@@ -2506,7 +2504,6 @@
         e.exports = q
     }, function (e, t, r) {
         "use strict";
-
         function n(e) {
             return "attr_" + e
         }
@@ -3700,7 +3697,6 @@
         e.exports = c
     }, function (e, t, r) {
         "use strict";
-
         function n(e, t) {
             if (t.castShadow && !e.castShadow) return !0
         }
@@ -4114,7 +4110,6 @@
         e.exports = "@export ecgl.lines3D.vertex\n\nuniform mat4 worldViewProjection : WORLDVIEWPROJECTION;\n\nattribute vec3 position: POSITION;\nattribute vec4 a_Color : COLOR;\nvarying vec4 v_Color;\n\nvoid main()\n{\n gl_Position = worldViewProjection * vec4(position, 1.0);\n v_Color = a_Color;\n}\n\n@end\n\n@export ecgl.lines3D.fragment\n\nuniform vec4 color : [1.0, 1.0, 1.0, 1.0];\n\nvarying vec4 v_Color;\n\n@import qtek.util.srgb\n\nvoid main()\n{\n#ifdef SRGB_DECODE\n gl_FragColor = sRGBToLinear(color * v_Color);\n#else\n gl_FragColor = color * v_Color;\n#endif\n}\n@end\n\n\n\n@export ecgl.lines3D.clipNear\n\nvec4 clipNear(vec4 p1, vec4 p2) {\n float n = (p1.w - near) / (p1.w - p2.w);\n return vec4(mix(p1.xy, p2.xy, n), -near, near);\n}\n\n@end\n\n@export ecgl.lines3D.expandLine\n#ifdef VERTEX_ANIMATION\n vec4 prevProj = worldViewProjection * vec4(mix(prevPositionPrev, positionPrev, percent), 1.0);\n vec4 currProj = worldViewProjection * vec4(mix(prevPosition, position, percent), 1.0);\n vec4 nextProj = worldViewProjection * vec4(mix(prevPositionNext, positionNext, percent), 1.0);\n#else\n vec4 prevProj = worldViewProjection * vec4(positionPrev, 1.0);\n vec4 currProj = worldViewProjection * vec4(position, 1.0);\n vec4 nextProj = worldViewProjection * vec4(positionNext, 1.0);\n#endif\n\n if (currProj.w < 0.0) {\n if (nextProj.w > 0.0) {\n currProj = clipNear(currProj, nextProj);\n }\n else if (prevProj.w > 0.0) {\n currProj = clipNear(currProj, prevProj);\n }\n }\n\n vec2 prevScreen = (prevProj.xy / abs(prevProj.w) + 1.0) * 0.5 * viewport.zw;\n vec2 currScreen = (currProj.xy / abs(currProj.w) + 1.0) * 0.5 * viewport.zw;\n vec2 nextScreen = (nextProj.xy / abs(nextProj.w) + 1.0) * 0.5 * viewport.zw;\n\n vec2 dir;\n float len = offset;\n if (position == positionPrev) {\n dir = normalize(nextScreen - currScreen);\n }\n else if (position == positionNext) {\n dir = normalize(currScreen - prevScreen);\n }\n else {\n vec2 dirA = normalize(currScreen - prevScreen);\n vec2 dirB = normalize(nextScreen - currScreen);\n\n vec2 tanget = normalize(dirA + dirB);\n\n float miter = 1.0 / max(dot(tanget, dirA), 0.5);\n len *= miter;\n dir = tanget;\n }\n\n dir = vec2(-dir.y, dir.x) * len;\n currScreen += dir;\n\n currProj.xy = (currScreen / viewport.zw - 0.5) * 2.0 * abs(currProj.w);\n@end\n\n\n@export ecgl.meshLines3D.vertex\n\nattribute vec3 position: POSITION;\nattribute vec3 positionPrev;\nattribute vec3 positionNext;\nattribute float offset;\nattribute vec4 a_Color : COLOR;\n\n#ifdef VERTEX_ANIMATION\nattribute vec3 prevPosition;\nattribute vec3 prevPositionPrev;\nattribute vec3 prevPositionNext;\nuniform float percent : 1.0;\n#endif\n\nuniform mat4 worldViewProjection : WORLDVIEWPROJECTION;\nuniform vec4 viewport : VIEWPORT;\nuniform float near : NEAR;\n\nvarying vec4 v_Color;\n\n@import ecgl.common.wireframe.vertexHeader\n\n@import ecgl.lines3D.clipNear\n\nvoid main()\n{\n @import ecgl.lines3D.expandLine\n\n gl_Position = currProj;\n\n v_Color = a_Color;\n\n @import ecgl.common.wireframe.vertexMain\n}\n@end\n\n\n@export ecgl.meshLines3D.fragment\n\nuniform vec4 color : [1.0, 1.0, 1.0, 1.0];\n\nvarying vec4 v_Color;\n\n@import ecgl.common.wireframe.fragmentHeader\n\n@import qtek.util.srgb\n\nvoid main()\n{\n#ifdef SRGB_DECODE\n gl_FragColor = sRGBToLinear(color * v_Color);\n#else\n gl_FragColor = color * v_Color;\n#endif\n\n @import ecgl.common.wireframe.fragmentMain\n}\n\n@end"
     }, function (e, t, r) {
         "use strict";
-
         function n(e, t, r, n, i) {
             var a = 0, o = 0;
             null == n && (n = 1 / 0), null == i && (i = 1 / 0);
@@ -6052,7 +6047,6 @@
         e.exports = l
     }, function (e, t, r) {
         "use strict";
-
         function n(e, t, r) {
             this.availableAttributes = e, this.availableAttributeSymbols = t, this.indicesBuffer = r, this.vao = null
         }
@@ -6194,7 +6188,6 @@
         e.exports = o
     }, function (e, t, r) {
         "use strict";
-
         function n(e) {
             u.defaultsWithPropList(e, l, c), i(e);
             for (var t = "", r = 0; r < c.length; r++) {
@@ -6251,7 +6244,6 @@
         e.exports = h
     }, function (e, t, r) {
         "use strict";
-
         function n(e) {
             var t = new XMLHttpRequest;
             t.open("get", e.url), t.responseType = e.responseType || "text", e.onprogress && (t.onprogress = function (t) {
@@ -6267,7 +6259,6 @@
         e.exports = {get: n}
     }, function (e, t, r) {
         "use strict";
-
         function n(e, t, r) {
             l.identity();
             var n = new a({widthSegments: t, heightSegments: r});
@@ -6553,7 +6544,6 @@
         }
     }, function (e, t, r) {
         "use strict";
-
         function n(e, t, r, n) {
             r < 0 && (e += r, r = -r), n < 0 && (t += n, n = -n), this.x = e, this.y = t, this.width = r, this.height = n
         }
@@ -11135,7 +11125,6 @@
         e.exports = i
     }, function (e, t, r) {
         "use strict";
-
         function n(e, t, r) {
             r = r || 2;
             var n = t && t.length, a = n ? t[0] * r : e.length, s = i(e, 0, a, r, !0), u = [];
@@ -11825,7 +11814,6 @@
         }, e.exports = w
     }, function (e, t, r) {
         "use strict";
-
         function n(e) {
             return this._axes[e]
         }
@@ -11881,7 +11869,6 @@
         }
     }, function (e, t, r) {
         "use strict";
-
         function n(e) {
             return "_EC_" + e
         }
@@ -12098,7 +12085,6 @@
         }, o.truncateText = a.truncateText, e.exports = o
     }, function (e, t, r) {
         "use strict";
-
         function n(e) {
             var t;
             switch (e) {
@@ -12419,7 +12405,6 @@
         e.exports = i
     }, function (e, t, r) {
         "use strict";
-
         function n(e, t, r) {
             "object" == typeof t && (r = t, t = null);
             var n, o = this;
@@ -12521,7 +12506,6 @@
         e.exports = a
     }, function (e, t, r) {
         "use strict";
-
         function n(e, t) {
             return function (r) {
                 var n = r.getDevicePixelRatio(), i = r.getWidth(), a = r.getHeight(), o = t(i, a, n);
@@ -13418,7 +13402,6 @@
         }, e.exports = g
     }, function (e, t, r) {
         "use strict";
-
         function n(e) {
             return e.charCodeAt(0) + (e.charCodeAt(1) << 8) + (e.charCodeAt(2) << 16) + (e.charCodeAt(3) << 24)
         }
@@ -13460,7 +13443,6 @@
         e.exports = h
     }, function (e, t, r) {
         "use strict";
-
         function n(e, t, r, n) {
             if (e[3] > 0) {
                 var i = Math.pow(2, e[3] - 128 - 8 + n);
