@@ -19,8 +19,7 @@
     var app = angular.module('app', []);
     app.controller('ctrl', function ($interval) {
         var ech = document.getElementById('mapOption');
-//        var color = "rgba(0,176,0,0.8)";
-        var color = "#00FFFF";
+        var color = "rgba(0,176,0,0.8)";
         var myChart = echarts.init(ech);
         var option;
         var allData = {
@@ -32,7 +31,6 @@
                     "itemStyle": {
                         "normal": {
                             "color": "#dc4e49" // 红色
-//                            "color": "yellow"
                         }
                     }
                 },
@@ -43,7 +41,6 @@
                     "itemStyle": {
                         "normal": {
                             "color": "#dc4e49" // 红色
-//                            "color": "yellow"
                         }
                     }
                 },
@@ -151,64 +148,64 @@
                 {
                     "coords": [
                         [117.2792806320, 31.8485098902],  // 起点 兴都大厦
-//                        [117.2778107815, 31.8480222808] // 终点 丝绸大厦
-                        [117.2738518410, 31.8465412082]
+                        [117.2778107815, 31.8480222808] // 终点 丝绸大厦
+//                        [117.2738518410, 31.8465412082]
                     ]
                 }, {
                     "coords": [
                         [117.2697481142, 31.8457855544], // 起点 合肥学院
-//                        [117.2726180248, 31.8465958944]
-                        [117.2738518410, 31.8465412082]
+                        [117.2726180248, 31.8465958944]
+//                        [117.2738518410, 31.8465412082]
                     ]
                 }, {
                     "coords": [
                         [117.2819458309, 31.8435135715], // 起点 金水花园
-//                        [117.2794952087, 31.8445451406]
-                        [117.2738518410, 31.8465412082]
+                        [117.2794952087, 31.8445451406]
+//                        [117.2738518410, 31.8465412082]
                     ]
                 }, {
                     "coords": [
                         [117.2712286936, 31.8420120926], // 起点 美第阳光大厦
-//                        [117.2719421082,31.8436792531]
-                        [117.2738518410, 31.8465412082]
+                        [117.2719421082, 31.8436792531]
+//                        [117.2738518410, 31.8465412082]
                     ]
                 }, {
                     "coords": [
                         [117.2766413383, 31.8423667344], // 起点 中国科学技术大学学生宿舍
-//                        [117.2756542854,31.8437703995]
-                        [117.2738518410, 31.8465412082]
+                        [117.2756542854, 31.8437703995]
+//                        [117.2738518410, 31.8465412082]
                     ]
                 }],
             "line2": [
                 {
                     "coords": [
                         [117.2523249441, 31.8517400335], // 起点 摩尔广场
-//                        [117.2536074538,31.8501635089]
-                        [117.2556673903, 31.8472287438]
+                        [117.2536074538, 31.8501635089]
+//                        [117.2556673903,31.8472287438]
                     ]
                 }, {
                     "coords": [
                         [117.2614869105, 31.8511264708], // 起点 安徽大学
-//                        [117.2598301787,31.8499083156]
-                        [117.2556673903, 31.8472287438]
+                        [117.2598301787, 31.8499083156]
+//                        [117.2556673903,31.8472287438]
                     ]
                 }, {
                     "coords": [
                         [117.2616156565, 31.8446553550], // 起点 中国科技大学西校区
-//                        [117.2589933295,31.8458068985]
-                        [117.2556673903, 31.8472287438]
+                        [117.2589933295, 31.8458068985]
+//                        [117.2556673903,31.8472287438]
                     ]
                 }, {
                     "coords": [
                         [117.2524916548, 31.8441662806], // 起点 绿城百合公寓
-//                        [117.2541868109,31.8456792959]
-                        [117.2556673903, 31.8472287438]
+                        [117.2541868109, 31.8456792959]
+//                        [117.2556673903,31.8472287438]
                     ]
                 }, {
                     "coords": [
                         [117.2498550189, 31.8480749040], // 起点 黄山路
-//                        [117.2521912474,31.8477938300]
-                        [117.2556673903, 31.8472287438]
+                        [117.2521912474, 31.8477938300]
+//                        [117.2556673903,31.8472287438]
                     ]
                 }
             ]
@@ -217,6 +214,13 @@
 
         option = {
             backgroundColor: '#00040C',
+            title: {
+                text: '车辆调度',
+                left: 'center',
+                textStyle: {
+                    color: '#00FFFF'
+                }
+            },
             legend: {
                 show: false,
                 orient: 'vertical',
@@ -229,128 +233,118 @@
             },
             bmap: {
                 center: [117.2697910296, 31.8476722274],
-//                center: [117.2710248457,31.8477451415],
                 zoom: 16,
                 roam: true,
                 mapStyle: {
                     styleJson: [
                         {
-                            "featureType": "water",
-                            "elementType": "all",
-                            "stylers": {
-                                "color": "#031628"
-                            }
-                        },
-                        {
                             "featureType": "land",
                             "elementType": "geometry",
                             "stylers": {
-                                "color": "#000102"
+                                "color": "#212121"
+                            }
+                        },
+                        {
+                            "featureType": "building",
+                            "elementType": "geometry",
+                            "stylers": {
+                                "color": "#2b2b2b"
                             }
                         },
                         {
                             "featureType": "highway",
                             "elementType": "all",
                             "stylers": {
-                                "visibility": "off"
+                                "lightness": -42,
+                                "saturation": -91
                             }
                         },
                         {
                             "featureType": "arterial",
-                            "elementType": "geometry.fill",
-                            "stylers": {
-                                "color": "#000000"
-                            }
-                        },
-                        {
-                            "featureType": "arterial",
-                            "elementType": "geometry.stroke",
-                            "stylers": {
-                                "color": "#0b3d51"
-                            }
-                        },
-                        {
-                            "featureType": "local",
                             "elementType": "geometry",
                             "stylers": {
-                                "color": "#000000"
-                            }
-                        },
-                        {
-                            "featureType": "railway",
-                            "elementType": "geometry.fill",
-                            "stylers": {
-                                "color": "#000000"
-                            }
-                        },
-                        {
-                            "featureType": "railway",
-                            "elementType": "geometry.stroke",
-                            "stylers": {
-                                "color": "#08304b"
-                            }
-                        },
-                        {
-                            "featureType": "subway",
-                            "elementType": "geometry",
-                            "stylers": {
-                                "lightness": -70
-                            }
-                        },
-                        {
-                            "featureType": "building",
-                            "elementType": "geometry.fill",
-                            "stylers": {
-                                "color": "#000000"
-                            }
-                        },
-                        {
-                            "featureType": "all",
-                            "elementType": "labels.text.fill",
-                            "stylers": {
-                                "color": "#857f7f"
-                            }
-                        },
-                        {
-                            "featureType": "all",
-                            "elementType": "labels.text.stroke",
-                            "stylers": {
-                                "color": "#000000"
-                            }
-                        },
-                        {
-                            "featureType": "building",
-                            "elementType": "geometry",
-                            "stylers": {
-                                "color": "#022338"
+                                "lightness": -77,
+                                "saturation": -94
                             }
                         },
                         {
                             "featureType": "green",
                             "elementType": "geometry",
                             "stylers": {
-                                "color": "#062032"
+                                "color": "#1b1b1b"
                             }
                         },
                         {
-                            "featureType": "boundary",
-                            "elementType": "all",
+                            "featureType": "water",
+                            "elementType": "geometry",
                             "stylers": {
-                                "color": "#465b6c"
+                                "color": "#181818"
+                            }
+                        },
+                        {
+                            "featureType": "subway",
+                            "elementType": "geometry.stroke",
+                            "stylers": {
+                                "color": "#181818"
+                            }
+                        },
+                        {
+                            "featureType": "railway",
+                            "elementType": "geometry",
+                            "stylers": {
+                                "lightness": -52
+                            }
+                        },
+                        {
+                            "featureType": "all",
+                            "elementType": "labels.text.stroke",
+                            "stylers": {
+                                "color": "#313131"
+                            }
+                        },
+                        {
+                            "featureType": "all",
+                            "elementType": "labels.text.fill",
+                            "stylers": {
+                                "color": "#8b8787"
                             }
                         },
                         {
                             "featureType": "manmade",
-                            "elementType": "all",
+                            "elementType": "geometry",
                             "stylers": {
-                                "color": "#022338"
+                                "color": "#1b1b1b"
                             }
                         },
                         {
-                            "featureType": "label",
+                            "featureType": "local",
+                            "elementType": "geometry",
+                            "stylers": {
+                                "lightness": -75,
+                                "saturation": -91
+                            }
+                        },
+                        {
+                            "featureType": "subway",
+                            "elementType": "geometry",
+                            "stylers": {
+                                "lightness": -65
+                            }
+                        },
+                        {
+                            "featureType": "railway",
                             "elementType": "all",
                             "stylers": {
-                                "visibility": "off"
+                                "lightness": -40
+                            }
+                        },
+                        {
+                            "featureType": "boundary",
+                            "elementType": "geometry",
+                            "stylers": {
+                                "color": "#8b8787",
+                                "weight": "1",
+                                "lightness": -29
                             }
                         }
                     ]
@@ -387,19 +381,18 @@
                 effect: {
                     show: true,
                     period: 3,
-                    trailLength: 0.3,
-//                    constantSpeed: 80,
-//                    color: '#ED1B10',
-                    color: "#00FFFF",
-                    symbolSize: 5,
-//                        symbol: 'image://../img/mobike.png'triangle
-                    symbol: 'circle'
+                    trailLength: 0.5,
+                    constantSpeed: 50,
+                    color: '#ED1B10',
+//                    color: '#fff',
+                    symbolSize: 10,
+                    symbol: 'triangle'
                 },
                 lineStyle: {
                     normal: {
-//                        color: "transparent",
-                        color: "#00FFFF",
-                        width: 2,
+                        color: "transparent",
+//                        color: "rgba(0,176,0,0.8)",
+                        width: 0,
                         curveness: 0.1
                     }
                 },
@@ -411,19 +404,18 @@
                 effect: {
                     show: true,
                     period: 3,
-                    trailLength: 0.3,
-//                    constantSpeed: 40,
-//                    color: '#ED1B10',
-                    color: "#00FFFF",
-                    symbolSize: 5,
-//                        symbol: 'image://../img/mobike.png'triangle
-                    symbol: 'circle'
+                    trailLength: 0.5,
+                    constantSpeed: 50,
+                    color: '#ED1B10',
+//                    color: '#fff',
+                    symbolSize: 10,
+                    symbol: 'triangle'
                 },
                 lineStyle: {
                     normal: {
-//                        color: "transparent",
-                        color: "#00FFFF",
-                        width: 2,
+                        color: "transparent",
+//                        color: "rgba(0,176,0,0.8)",
+                        width: 0,
                         curveness: 0.1
                     }
                 },
