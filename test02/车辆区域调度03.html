@@ -11,27 +11,13 @@
     <script type="text/javascript" src="../js/ng-echarts.js"></script>
     <script type="text/javascript" src="../js/getscript.js"></script>
     <script type="text/javascript" src="../js/echarts-gl.js"></script>
-    <script type="text/javascript"
-            src="http://api.map.baidu.com/library/TrafficControl/1.4/src/TrafficControl_min.js"></script>
-    <script type="text/javascript"
-            src="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js"></script>
-    <script type="text/javascript"
-            src="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.js"></script>
-    <script type="text/javascript"
-            src="http://api.map.baidu.com/library/DistanceTool/1.2/src/DistanceTool_min.js"></script>
-    <script type="text/javascript" src="http://api.map.baidu.com/library/LuShu/1.2/src/LuShu_min.js"></script>
-    <script type="text/javascript"
-            src="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/TextIconOverlay_min.js"></script>
-    <script type="text/javascript"
-            src="http://api.map.baidu.com/library/MarkerClusterer/1.2/src/MarkerClusterer_min.js"></script>
-    <script type="text/javascript" src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
 </head>
 <body>
 
 <div id="mapOption" style="height: 450px;width:65%;" ng-app="app" ng-controller="ctrl"></div>
 <script type="text/javascript">
     var app = angular.module('app', []);
-    app.controller('ctrl', function () {
+    app.controller('ctrl', function ($interval) {
         var ech = document.getElementById('mapOption');
         var color = "#00FFFF";
         var symbolSize = 25;
@@ -39,10 +25,9 @@
         var option;
         var allData = {
             "redPlaces": [{
-                "name": "中国科学技术大学车辆停放点", // 中国科学技术大学东区黄金广场31.8372583692,117.2521287762   117.273641,31.847251
+                "name": "中国科学技术大学车辆停放点", // 中国科学技术大学东区黄金广场31.8372583692,117.2521287762
                 "value": [117.2738518410, 31.8465412082, 20],
                 "symbolSize": 50,
-                "symbol": "image://../img/bikeDispatcher.gif",
                 "label": {
                     "normal": {
                         "show": true,
@@ -53,7 +38,6 @@
                 "itemStyle": {
                     "normal": {
                         "color": "rgba(220,78,73,0.5)" // 红色
-//                        "color": "transparent"
                     }
                 }
             },
@@ -61,7 +45,6 @@
                     "name": "合肥科技馆车辆停放点",
                     "value": [117.2556673903, 31.8472287438, 20],
                     "symbolSize": 50,
-                    "symbol": "image://../img/bikeDispatcher.gif",
                     "label": {
                         "normal": {
                             "show": true,
@@ -73,7 +56,6 @@
                         "normal": {
 //                            "color": "#dc4e49" // 红色
                             "color": "rgba(220,78,73,0.5)"
-//                            "color": "transparent"
                         }
                     }
                 }],
@@ -342,116 +324,51 @@
                 mapStyle: {
                     styleJson: [
                         {
-                            "featureType": "land",
-                            "elementType": "geometry",
+                            "featureType": "poi",
+                            "elementType": "all",
                             "stylers": {
-                                "color": "#212121"
+                                "visibility": "off"
                             }
                         },
                         {
                             "featureType": "building",
-                            "elementType": "geometry",
-                            "stylers": {
-                                "color": "#2b2b2b",
-                            }
-                        },
-                        {
-                            "featureType": "highway",
                             "elementType": "all",
                             "stylers": {
-                                "lightness": -42,
-                                "saturation": -91
-                            }
-                        },
-                        {
-                            "featureType": "arterial",
-                            "elementType": "geometry",
-                            "stylers": {
-                                "lightness": -77,
-                                "saturation": -94
-                            }
-                        },
-                        {
-                            "featureType": "green",
-                            "elementType": "geometry",
-                            "stylers": {
-                                "color": "#1b1b1b"
-                            }
-                        },
-                        {
-                            "featureType": "water",
-                            "elementType": "geometry",
-                            "stylers": {
-                                "color": "#181818"
-                            }
-                        },
-                        {
-                            "featureType": "subway",
-                            "elementType": "geometry.stroke",
-                            "stylers": {
-                                "color": "#181818"
-                            }
-                        },
-                        {
-                            "featureType": "railway",
-                            "elementType": "geometry",
-                            "stylers": {
-                                "lightness": -52
-                            }
-                        },
-                        {
-                            "featureType": "all",
-                            "elementType": "labels.text.stroke",
-//                            "elementType": "labels",
-                            "stylers": {
-                                "color": "#313131",
-                            }
-                        },
-                        {
-                            "featureType": "all",
-                            "elementType": "labels.text.fill",
-                            "stylers": {
-                                "color": "#8b8787",
-                            }
-                        },
-                        {
-                            "featureType": "manmade",
-                            "elementType": "geometry",
-                            "stylers": {
-                                "color": "#1b1b1b",
+                                "color": "#000000"
                             }
                         },
                         {
                             "featureType": "local",
-                            "elementType": "geometry",
+                            "elementType": "labels",
                             "stylers": {
-                                "lightness": -75,
-                                "saturation": -91,
-
+                                "visibility": "off"
                             }
                         },
                         {
                             "featureType": "subway",
-                            "elementType": "geometry",
-                            "stylers": {
-                                "lightness": -65
-                            }
-                        },
-                        {
-                            "featureType": "railway",
                             "elementType": "all",
                             "stylers": {
-                                "lightness": -40
+                                "visibility": "off"
                             }
                         },
                         {
-                            "featureType": "boundary",
-                            "elementType": "geometry",
+                            "featureType": "arterial",
+                            "elementType": "labels",
                             "stylers": {
-                                "color": "#8b8787",
-                                "weight": "1",
-                                "lightness": -29
+                                "visibility": "off"
                             }
+                        },
+                        {
+                            "featureType": "manmade",
+                            "elementType": "all",
+                            "stylers": {
+                                "visibility": "off"
+                            }
+                        },
+                        {
+                            "featureType": "building",
+                            "elementType": "all",
+                            "stylers": {}
                         }
                     ]
                 }
@@ -473,7 +390,6 @@
                     }
                 },
                 symbolSize: 1,
-                symbol: "image://../img/bikeDispatcher.gif",
                 showEffectOn: 'render',
                 itemStyle: {
                     normal: {
@@ -545,24 +461,72 @@
         };
         myChart.setOption(option);
 
-        // var baiduMap = myChart.getModel().getComponent('bmap').getBMap();
-        // var point1 = new BMap.Point(117.2738518410, 31.8465412082);
-        // var point2 = new BMap.Point(117.2556673903, 31.8472287438);
-        // var myIcon = new BMap.Icon('img/bikeDispatcher.gif', new BMap.Size(300,157));
-        // var opts1 = {
-        //     offset: new BMap.Size(115, 42), // 设置偏移量
-        //     icon: myIcon
-        // };
-        // var opts2 = {
-        //     offset: new BMap.Size(115, 42), // 设置偏移量
-        //     icon: myIcon
-        // };
-        // var marker1 = new BMap.Marker(point1, opts1);
-        // var marker2 = new BMap.Marker(point2, opts2);
-        // baiduMap.addOverlay(marker1);
-        // baiduMap.addOverlay(marker2);
-
+//        // 添加信息窗口
+//        var backMarker1 = new BMap.Marker(new BMap.Point(117.2760735379, 31.8432697953)); // 远处点
+//        var backMarker2 = new BMap.Marker(new BMap.Point(117.2511475442, 31.8377418537));
+//
+//        function addOverlay() {
+//            backMarker1.hide();
+//            backMarker2.hide();
+//            var baiduMap = myChart.getModel().getComponent('bmap').getBMap();
+//            var point = new BMap.Point(117.2760735379, 31.8432697953);
+//            var point2 = new BMap.Point(117.2511475442, 31.8377418537);
+//
+//            // 添加背景框
+//            var myIcon = new BMap.Icon('../img/infowindow4.png', new BMap.Size(340, 130));
+//            var opts1 = {
+//                offset: new BMap.Size(-25, -155), // 设置偏移量
+//                icon: myIcon
+//            };
+//            var opts2 = {
+//                offset: new BMap.Size(160, -360), // 设置偏移量
+//                icon: myIcon
+//            };
+//            backMarker1 = new BMap.Marker(point, opts1);
+//            backMarker2 = new BMap.Marker(point2, opts2);
+//            baiduMap.addOverlay(backMarker1);
+//            baiduMap.addOverlay(backMarker2);
+//
+//            // 添加信息
+//            var styles = {
+//                color: "white",
+//                fontSize: "16px",
+//                height: "25px",
+//                width: '260px',
+//                lineHeight: "25px",
+//                fontFamily: "微软雅黑",
+//                backgroundColor: '#9E3329',
+//                borderColor: '#9E3329'
+//            };
+//
+//            var label1 = new BMap.Label('停放点名称:中国科学技术大学\n', {offset: new BMap.Size(0, 6)}); // 创建文本标注对象
+//            label1.setStyle(styles);
+//            backMarker1.setLabel(label1);
+//            var number = Math.round(Math.random() * 50 + 16);
+//            var label2 = new BMap.Label('需求车辆:' + number, {offset: new BMap.Size(0, 30)});
+//            label2.setStyle(styles);
+//            backMarker1.setLabel(label2);
+//            var label3 = new BMap.Label('停放点名称:合肥科技馆停放点\n', {offset: new BMap.Size(0, 6)}); // 创建文本标注对象
+//            label3.setStyle(styles);
+//            backMarker2.setLabel(label3);
+//            var number = Math.round(Math.random() * 50 + 16);
+//            var label4 = new BMap.Label('需求车辆:' + number, {offset: new BMap.Size(0, 30)});
+//            label4.setStyle(styles);
+//            backMarker2.setLabel(label4);
+//        }
+//
+//        addOverlay();
+//
+//        $interval(function () {
+//            addOverlay();
+//        }, 1000, 2)
     });
 </script>
 </body>
 </html>
+
+
+
+
+
+

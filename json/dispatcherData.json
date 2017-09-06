@@ -1,5 +1,5 @@
 {
-  "citys": [
+  "dispatcherPlaces": [
     {
       "name": "中国科学技术大学车辆停放点",
       "value": [
@@ -7,10 +7,10 @@
         31.8465412082,
         20
       ],
-      "symbolSize": 30,
+      "symbolSize": 50,
       "itemStyle": {
         "normal": {
-          "color": "#dc4e49"
+          "color": "#4AC674"
         }
       }
     },
@@ -21,13 +21,15 @@
         31.8472287438,
         20
       ],
-      "symbolSize": 30,
+      "symbolSize": 50,
       "itemStyle": {
         "normal": {
-          "color": "#dc4e49"
+          "color": "#F5B402"
         }
       }
-    },
+    }
+  ],
+  "dispatchedPlaces": [
     {
       "name": "兴都大厦",
       "value": [
@@ -35,10 +37,10 @@
         31.8485098902,
         20
       ],
-      "symbolSize": 15,
+      "symbolSize": 25,
       "itemStyle": {
         "normal": {
-          "color": "#00FFFF"
+          "color": "#60FF8A"
         }
       }
     },
@@ -49,10 +51,10 @@
         31.8457855544,
         20
       ],
-      "symbolSize": 15,
+      "symbolSize": 25,
       "itemStyle": {
         "normal": {
-          "color": "#00FFFF"
+          "color": "#60FF8A"
         }
       }
     },
@@ -63,10 +65,10 @@
         31.8435135715,
         20
       ],
-      "symbolSize": 15,
+      "symbolSize": 25,
       "itemStyle": {
         "normal": {
-          "color": "#00FFFF"
+          "color": "#60FF8A"
         }
       }
     },
@@ -80,7 +82,7 @@
       "symbolSize": 5,
       "itemStyle": {
         "normal": {
-          "color": "#00FFFF"
+          "color": "#60FF8A"
         }
       }
     },
@@ -94,7 +96,7 @@
       "symbolSize": 5,
       "itemStyle": {
         "normal": {
-          "color": "#00FFFF"
+          "color": "#60FF8A"
         }
       }
     },
@@ -105,10 +107,10 @@
         31.8517400335,
         20
       ],
-      "symbolSize": 15,
+      "symbolSize": 25,
       "itemStyle": {
         "normal": {
-          "color": "#00FFFF"
+          "color": "#F5B402"
         }
       }
     },
@@ -119,10 +121,10 @@
         31.8511264708,
         20
       ],
-      "symbolSize": 15,
+      "symbolSize": 25,
       "itemStyle": {
         "normal": {
-          "color": "#00FFFF"
+          "color": "#F5B402"
         }
       }
     },
@@ -133,10 +135,10 @@
         31.8446553550,
         20
       ],
-      "symbolSize": 15,
+      "symbolSize": 25,
       "itemStyle": {
         "normal": {
-          "color": "#00FFFF"
+          "color": "#F5B402"
         }
       }
     },
@@ -150,7 +152,7 @@
       "symbolSize": 5,
       "itemStyle": {
         "normal": {
-          "color": "#00FFFF"
+          "color": "#F5B402"
         }
       }
     },
@@ -164,7 +166,7 @@
       "symbolSize": 5,
       "itemStyle": {
         "normal": {
-          "color": "#00FFFF"
+          "color": "#F5B402"
         }
       }
     }
